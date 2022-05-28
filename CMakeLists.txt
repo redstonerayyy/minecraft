@@ -4,6 +4,14 @@ project(opengl)
 
 find_package(OpenGL REQUIRED)
 
+if (OPENGL_FOUND)
+    message("opengl found")
+    message("include dir: ${OPENGL_INCLUDE_DIR}")
+    message("link libraries: ${OPENGL_gl_LIBRARY}")
+else (OPENGL_FOUND)
+    message("opengl not found")
+endif()
+
 include_directories(${OPENGL_INCLUDE_DIRS})
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)

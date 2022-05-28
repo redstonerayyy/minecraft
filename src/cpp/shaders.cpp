@@ -1,4 +1,8 @@
 #include "shaders.h"
+//advanced calculation stuff
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 unsigned int makeShader(int shaderType, const char *shaderSource){
 	unsigned int shader;
@@ -85,4 +89,8 @@ void Shader::setInt(const std::string &name, int value)
 void Shader::setFloat(const std::string &name, float value)
 { 
     glUniform1f(glGetUniformLocation(this->programID, name.c_str()), value); 
+}
+
+void Shader::setMatrix4fv(const std::string& name, glm::mat4 trans) {
+	glUniformMatrix4fv(glGetUniformLocation(this->programID, name.c_str()), 1, GL_FALSE, glm::value_ptr(trans));
 }

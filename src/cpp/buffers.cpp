@@ -28,7 +28,6 @@ VAO::VAO(float *vertices, size_t varray_length, unsigned int *indices, size_t ia
 	glGenBuffers(1, &this->eboID);
 	this->fillVBO(vertices, varray_length);
 	this->fillEBO(indices, iarray_length);
-	this->setAttrib(0, 3, GL_FLOAT, false, 8, 0);
-	this->setAttrib(1, 3, GL_FLOAT, false, 8, 3);
-	this->setAttrib(2, 2, GL_FLOAT, false, 8, 6);
+	this->setAttrib(0, 3, GL_FLOAT, false, 5, 0);
+	this->setAttrib(1, 2, GL_FLOAT, false, 5, 3);
 }

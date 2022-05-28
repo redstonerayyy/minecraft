@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\src",
-    "\\src\\cpp",
-    "\\src\\include",
-    "\\src\\shaders"
+    "\\src"
   ],
-  "SelectedNode": "\\src\\main.cpp",
-  "PreviewInSolutionExplorer": false
+  "SelectedNode": "\\CMakeLists.txt",
+  "PreviewInSolutionExplorer": true
 }
