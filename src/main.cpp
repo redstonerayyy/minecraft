@@ -53,6 +53,8 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 	glViewport(0, 0, width, height);
 };
 
+//make turning with mouse
+//not really an idea what happens, just copied from learnopengl
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
 	float xpos = static_cast<float>(xposIn);
@@ -90,6 +92,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 	cameraFront = glm::normalize(front);
 }
 
+//zoom by changing fov
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	fov -= (float)yoffset;
@@ -103,9 +106,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 //react to input
 void processInput(GLFWwindow* window)
 {
+	//close
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	//log fps
 	float currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
@@ -117,7 +122,9 @@ void processInput(GLFWwindow* window)
 		frameTimeAddition = 0.0f;
 	}
 
+	//move camera
 	const float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
+	//forward, backward, left, right
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPos += cameraSpeed * cameraFront;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -126,6 +133,11 @@ void processInput(GLFWwindow* window)
 		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	//up, down
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		cameraPos += cameraUp * cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		cameraPos -= cameraUp * cameraSpeed;
 }
 
 
@@ -167,91 +179,18 @@ int main()
 	//TODO implement relative resource searching
 	Shader defaultShader("C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\vertex.glsl", "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\fragment.glsl");
 	
-	// vertices -> move to other file
-
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-
-	unsigned int indices[] = {
-		// note that we start from 0!
-		0,
-		1,
-		2, // first triangle
-		0,
-		2,
-		3,
-	};
-
-	glm::vec3 cubePositions[] = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)
-	};
+	// VERTEX DATA
+	// vertices, indices, cube position -> moved to other file
+	
+	#include "vertexdata.h"
 
 	VAO defaultVAO(vertices, sizeof(vertices), indices, sizeof(indices));
 	// defaultVAO.use();
 
-	// wrap
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	// bordercolor
-	float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-	// filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-	Texture face(0, "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\awesomeface.png");
-	Texture container(1, "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\container.jpg");
+	// TEXTURES
+	Texture face(0, "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\checkboard32.png");
 	
+	// RENDER OPTIONS
 	// Wireframes
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -272,7 +211,7 @@ int main()
 		defaultShader.setMatrix4fv("view", view);
 
 		//projection matrix, view space to device cordinates
-		glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
 		defaultShader.setMatrix4fv("projection", projection);
 
 		// DRAWING
@@ -285,8 +224,9 @@ int main()
 		defaultShader.use();
 		
 		//textures
+		face.setActiveTexture(0);
+		face.BindTexture();
 		defaultShader.setInt("texture0", 0);
-		defaultShader.setInt("texture1", 1);
 		
 		//draw cubes
 		for (int i = 0; i < 10; i++) {	
