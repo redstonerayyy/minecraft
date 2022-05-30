@@ -17,27 +17,41 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
+
+// GLOBALs
+//camera position
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+//camera rotation
+float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
+float pitch = 0.0f;
+//camera field of view
+float fov = 45.0f;
+
+//matrices
+glm::mat4 model;
+glm::mat4 view;
+glm::mat4 projection;
+
+//time, fps
+float deltaTime = 0.0f;	// Time between current frame and last frame
+float lastFrame = 0.0f; // Time of last frame
+float fps = 0.0f;
+float frameTimeAddition = 0.0f;
+
+//input
+bool firstMouse = true; //set to false if mouse enters the window
+float lastX = 800.0f / 2.0f;
+float lastY = 600.0f / 2.0f;
+
+//callbacks
 //change viewport when window is changed, only works on release of window
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 };
-
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-float deltaTime = 0.0f;	// Time between current frame and last frame
-float lastFrame = 0.0f; // Time of last frame
-float fps = 0.0f;
-float frameaddition = 0.0f;
-
-bool firstMouse = true;
-float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
-float pitch = 0.0f;
-float lastX = 800.0f / 2.0f;
-float lastY = 600.0f / 2.0f;
-float fov = 45.0f;
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
@@ -76,10 +90,6 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 	cameraFront = glm::normalize(front);
 }
 
-//projection matrix, view space to device cordinates
-glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	fov -= (float)yoffset;
@@ -99,14 +109,13 @@ void processInput(GLFWwindow* window)
 	float currentFrame = glfwGetTime();
 	deltaTime = currentFrame - lastFrame;
 	lastFrame = currentFrame;
-	frameaddition += deltaTime;
+	frameTimeAddition += deltaTime;
 	fps += 1.0f;
-	if (frameaddition > 1.0f) {
+	if (frameTimeAddition > 1.0f) {
 		std::cout << fps << std::endl;
 		fps = 0.0f;
-		frameaddition = 0.0f;
+		frameTimeAddition = 0.0f;
 	}
-
 
 	const float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -119,9 +128,10 @@ void processInput(GLFWwindow* window)
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
 
+
 int main()
 {
-	// glfw
+	// GLWF
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -143,24 +153,21 @@ int main()
 		return -1;
 	};
 
-	glViewport(0, 0, 800, 600);
-
+	//set callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
-	// shader
+	// OPENGL
+	//set opengl viewport
+	glViewport(0, 0, 800, 600);
+	
+	// SHADERS
+	//TODO implement relative resource searching
 	Shader defaultShader("C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\vertex.glsl", "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\fragment.glsl");
-	// main code
-
-	//float vertices[] = {
-	//	// positions      // texture coords
-	//	0.5f, 0.5f, 0.0f, 1.0f, 1.0f,	  // top right
-	//	0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
-	//	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
-	//	-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,  // top left
-	//};
+	
+	// vertices -> move to other file
 
 	float vertices[] = {
 	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -244,55 +251,44 @@ int main()
 
 	Texture face(0, "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\awesomeface.png");
 	Texture container(1, "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\container.jpg");
-	// Wireframes
-	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-
-	//model matrix, local space to world space
-	// in render loop 
-
-	////camera
-	//glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-	//glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-	//glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-	//glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-	//glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-	//glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
-
-	//view matrix, world space to view space
-	//glm::mat4 view = glm::mat4(1.0f);
-	// note that we're translating the scene in the reverse direction of where we want to move
-	//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
-
 	
+	// Wireframes
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	//avoid random drawing, not continous geometry
 	glEnable(GL_DEPTH_TEST);
 
+	// RENDER LOOP
 	while (!glfwWindowShouldClose(window))
 	{
+		// INPUT
+		//keysboard input, mouse input
 		processInput(window);
 
+		// CAMERA
+		// model matrix set further down, dynamically for each object
+		//view matrix, transform world space to camera space
+		glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		defaultShader.setMatrix4fv("view", view);
+
+		//projection matrix, view space to device cordinates
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+		defaultShader.setMatrix4fv("projection", projection);
+
+		// DRAWING
+		//clear color and depth buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
-		// already binded
+		//vertex data, shaders
 		defaultVAO.use();
 		defaultShader.use();
 		
-		//camera
-		glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-		////const float radius = 10.0f;
-		//float camX = sin(glfwGetTime()) * radius;
-		//float camZ = cos(glfwGetTime()) * radius;
-		//glm::mat4 view;
-		//view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
-
-		defaultShader.setMatrix4fv("view", view);
-		defaultShader.setMatrix4fv("projection", projection);
+		//textures
 		defaultShader.setInt("texture0", 0);
 		defaultShader.setInt("texture1", 1);
 		
+		//draw cubes
 		for (int i = 0; i < 10; i++) {	
 			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, cubePositions[i]);
@@ -301,8 +297,8 @@ int main()
 			defaultShader.setMatrix4fv("model", model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+		//GLFW updating the window
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

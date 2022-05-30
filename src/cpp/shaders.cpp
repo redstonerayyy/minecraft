@@ -1,4 +1,7 @@
 #include "shaders.h"
+//util header
+#include "utils.h"
+
 //advanced calculation stuff
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -41,21 +44,6 @@ unsigned int makeProgram(unsigned int *shaders){
 	return program;
 }
 
-std::string readStringFromFile(const char *filePath){
-	std::ifstream file;
-	file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-	try{
-		file.open(filePath);
-		std::stringstream fileStream;
-		fileStream << file.rdbuf();
-		file.close();
-		return fileStream.str();
-		
-	} catch (std::ifstream::failure e){
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-		return NULL;
-	};
-}
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {

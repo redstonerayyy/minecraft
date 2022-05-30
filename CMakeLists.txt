@@ -28,6 +28,6 @@ include_directories(lib/include)
 
 FILE(GLOB SOURCE_FILES src/cpp/*.cpp)
 
-add_executable(opengl src/main.cpp ${SOURCE_FILES} glfw/deps/glad_gl.c)
+add_executable(opengl src/main.cpp ${SOURCE_FILES} glfw/deps/glad_gl.c "src/cpp/util.cpp")
 
 target_link_libraries(opengl ${OPENGL_LIBRARIES} glfw)
