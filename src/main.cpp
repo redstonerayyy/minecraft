@@ -177,7 +177,7 @@ int main()
 	
 	// SHADERS
 	//TODO implement relative resource searching
-	Shader defaultShader("C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\vertex.glsl", "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\fragment.glsl");
+	Shader defaultShader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
 	
 	// VERTEX DATA
 	// vertices, indices, cube position -> moved to other file
@@ -188,11 +188,11 @@ int main()
 	// defaultVAO.use();
 
 	// TEXTURES
-	Texture face(0, "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\checkboard32.png");
-	
+	unsigned int texture = makeTexture("src/textures/diamond_ore.png");
+
 	// RENDER OPTIONS
 	// Wireframes
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//avoid random drawing, not continous geometry
 	glEnable(GL_DEPTH_TEST);
@@ -224,9 +224,9 @@ int main()
 		defaultShader.use();
 		
 		//textures
-		face.setActiveTexture(0);
-		face.BindTexture();
-		defaultShader.setInt("texture0", 0);
+		// face.setActiveTexture(0);
+		// face.BindTexture();
+		// defaultShader.setInt("texture0", 0);
 		
 		//draw cubes
 		for (int i = 0; i < 10; i++) {	

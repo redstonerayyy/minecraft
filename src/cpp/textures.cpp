@@ -3,45 +3,28 @@
 #include <stb_image.h>
 #include "utils.h"
 
-Texture::Texture(unsigned int texturenumber, const char *filePath)
-{
-	this->setImageFlip(true);
-	glGenTextures(1, &this->texture);
-	this->loadImg(filePath);
-}
-
-void Texture::setImageFlip(bool isFlipped)
-{
-	stbi_set_flip_vertically_on_load(isFlipped);
-}
-
-void Texture::setActiveTexture(unsigned int textureNumber)
-{
-	glActiveTexture(GL_TEXTURE0 + textureNumber);
-}
-
-void Texture::BindTexture()
-{
-	glBindTexture(GL_TEXTURE_2D, this->texture);
-}
-
-void Texture::loadImg(const char *filePath)
-{
-	this->BindTexture();
+unsigned int makeTexture(std::string filename){
+	stbi_set_flip_vertically_on_load(true);
+	//generate texture
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	
 	// TEXTURE PROPERTIES
 	// wrap
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	
 	// bordercolor
 	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	
 	// filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load(filePath, &width, &height, &nrChannels, STBI_rgb);//use STBI_rgb_alpha for images with alpha, shown by strange colors
+	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrChannels, STBI_rgb);//use STBI_rgb_alpha for images with alpha, shown by strange colors
 	if (data)
 	{
 		if (nrChannels == 3) {
@@ -57,4 +40,5 @@ void Texture::loadImg(const char *filePath)
 		std::cout << "Failed to load Image" << std::endl;
 	}
 	stbi_image_free(data);
+	return texture;
 }
