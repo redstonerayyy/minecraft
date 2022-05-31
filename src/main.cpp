@@ -148,6 +148,8 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//MSAA 4x
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
@@ -208,6 +210,9 @@ int main()
 
 	//avoid random drawing, not continous geometry
 	glEnable(GL_DEPTH_TEST);
+
+	//MSAA
+	glEnable(GL_MULTISAMPLE);
 
 	// RENDER LOOP
 	while (!glfwWindowShouldClose(window))
