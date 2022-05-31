@@ -184,8 +184,7 @@ int main()
 	
 	#include "vertexdata.h"
 
-	VAO defaultVAO(vertices, sizeof(vertices), indices, sizeof(indices));
-	// defaultVAO.use();
+	VAO defaultVAO(cube, sizeof(cube), indices, sizeof(indices));
 
 	// TEXTURES
 	unsigned int texture = makeTexture("src/textures/diamond_ore.png");
@@ -228,7 +227,7 @@ int main()
 		// face.BindTexture();
 		// defaultShader.setInt("texture0", 0);
 		
-		int cubesize = 100;
+		int cubesize = 30;
 		//draw cubes
 		for (float i = 0.0f; i < cubesize; i++) {
 			for (float j = 0.0f; j < cubesize; j++) {
