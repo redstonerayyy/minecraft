@@ -15,7 +15,7 @@ public:
 	void fillVBO(float *vertices, size_t array_length);
 	void fillEBO(unsigned int *indices, size_t array_length);
 	void setAttrib(int attribID, int length, int type, bool normalized, int stride, int offset);
-	VAO(float *vertices, size_t varray_length, unsigned int *indices, size_t iarray_length);
+	VAO();
 };
 
 #endif

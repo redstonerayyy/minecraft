@@ -177,17 +177,30 @@ int main()
 	
 	// SHADERS
 	//TODO implement relative resource searching
-	Shader defaultShader("src/shaders/vertex.glsl", "src/shaders/fragment.glsl");
+	Shader defaultShader("C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\vertex.glsl", "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\fragment.glsl");
 	
+	Shader lightshader("C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\lightvertex.glsl", "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\light.glsl");
 	// VERTEX DATA
 	// vertices, indices, cube position -> moved to other file
 	
 	#include "vertexdata.h"
 
-	VAO defaultVAO(cube, sizeof(cube), indices, sizeof(indices));
+	VAO* cube = new VAO();
+	cube->fillVBO(cube_vertices, sizeof(cube_vertices));
+	//vertex cordinate
+	cube->setAttrib(0, 3, GL_FLOAT, false, 5, 0);
+	//texture cordinte
+	cube->setAttrib(1, 2, GL_FLOAT, false, 5, 3);
+	cube->fillEBO(indices, sizeof(indices));
+
+
+	VAO* light = new VAO();
+	light->fillVBO(light_vertices, sizeof(light_vertices));
+	light->setAttrib(0, 3, GL_FLOAT, false, 3, 0);
+	light->fillEBO(indices, sizeof(indices));
 
 	// TEXTURES
-	unsigned int texture = makeTexture("src/textures/diamond_ore.png");
+	unsigned int texture = makeTexture("C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\diamond_ore.png");
 
 	// RENDER OPTIONS
 	// Wireframes
@@ -203,6 +216,7 @@ int main()
 		//keysboard input, mouse input
 		processInput(window);
 
+		defaultShader.use();
 		// CAMERA
 		// model matrix set further down, dynamically for each object
 		//view matrix, transform world space to camera space
@@ -219,13 +233,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//vertex data, shaders
-		defaultVAO.use();
-		defaultShader.use();
-		
-		//textures
-		// face.setActiveTexture(0);
-		// face.BindTexture();
-		// defaultShader.setInt("texture0", 0);
+		cube->use();
+		defaultShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		
 		int cubesize = 30;
 		//draw cubes
@@ -239,6 +248,18 @@ int main()
 				}
 			}
 		}
+
+
+		//DRAW LIGHT
+
+		light->use();
+		lightshader.use();
+		lightshader.setMatrix4fv("view", view);
+		lightshader.setMatrix4fv("projection", projection);
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-1.0f, -1.0f, -1.0f));
+		lightshader.setMatrix4fv("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		//GLFW updating the window
 		glfwSwapBuffers(window);

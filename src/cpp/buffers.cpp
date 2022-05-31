@@ -22,14 +22,8 @@ void VAO::setAttrib(int attribID, int length, int type, bool normalized, int str
 	glEnableVertexAttribArray(attribID);
 }
 
-VAO::VAO(float *vertices, size_t varray_length, unsigned int *indices, size_t iarray_length){
+VAO::VAO(){
 	glGenVertexArrays(1, &this->vaoID);
 	glGenBuffers(1, &this->vboID);
 	glGenBuffers(1, &this->eboID);
-	this->fillVBO(vertices, varray_length);
-	this->fillEBO(indices, iarray_length);
-	//vertex cordinate
-	this->setAttrib(0, 3, GL_FLOAT, false, 5, 0);
-	//texture cordinte
-	this->setAttrib(1, 2, GL_FLOAT, false, 5, 3);
 }
