@@ -20,8 +20,8 @@
 
 // GLOBALs
 //camera position
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraPos = glm::vec3(-6.0f, 0.0f, 0.0f);
+glm::vec3 cameraFront = glm::vec3(1.0f, 0.0f, 0.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 //camera rotation
@@ -30,6 +30,9 @@ float pitch = 0.0f;
 //camera field of view
 float fov = 45.0f;
 
+
+//light
+float lighty = 1.0f;
 //matrices
 glm::mat4 model;
 glm::mat4 view;
@@ -179,9 +182,21 @@ int main()
 	
 	// SHADERS
 	//TODO implement relative resource searching
-	Shader defaultShader("C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\vertex.glsl", "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\fragment.glsl");
+	// std::string shadereDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
+	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
+	std::string vertexpath = shaderDir + "vertex.glsl";
+	std::string fragmentpath = shaderDir + "fragment.glsl";
+	Shader defaultShader(vertexpath.c_str(), fragmentpath.c_str());
 	
-	Shader lightshader("C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\lightvertex.glsl", "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\light.glsl");
+	std::string lightvertexpath = shaderDir + "lightvertex.glsl";
+	std::string lightfragmentpath = shaderDir + "light.glsl";
+	Shader lightshader(lightvertexpath.c_str(), lightfragmentpath.c_str());
+	
+	// TEXTURES
+	// std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
+	std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
+	unsigned int texture = makeTexture(textureDir + "diamond_ore.png");
+	
 	// VERTEX DATA
 	// vertices, indices, cube position -> moved to other file
 	
@@ -190,9 +205,10 @@ int main()
 	VAO* cube = new VAO();
 	cube->fillVBO(cube_vertices, sizeof(cube_vertices));
 	//vertex cordinate
-	cube->setAttrib(0, 3, GL_FLOAT, false, 5, 0);
+	cube->setAttrib(0, 3, GL_FLOAT, false, 8, 0);
 	//texture cordinte
-	cube->setAttrib(1, 2, GL_FLOAT, false, 5, 3);
+	cube->setAttrib(1, 2, GL_FLOAT, false, 8, 3);
+	cube->setAttrib(2, 3, GL_FLOAT, false, 8, 5);
 	cube->fillEBO(indices, sizeof(indices));
 
 
@@ -201,8 +217,6 @@ int main()
 	light->setAttrib(0, 3, GL_FLOAT, false, 3, 0);
 	light->fillEBO(indices, sizeof(indices));
 
-	// TEXTURES
-	unsigned int texture = makeTexture("C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\diamond_ore.png");
 
 	// RENDER OPTIONS
 	// Wireframes
@@ -240,6 +254,8 @@ int main()
 		//vertex data, shaders
 		cube->use();
 		defaultShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		defaultShader.setVec3("lightPos", -1.0f, lighty, -1.0f);
+		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z); 
 		
 		int cubesize = 30;
 		//draw cubes
@@ -262,7 +278,8 @@ int main()
 		lightshader.setMatrix4fv("view", view);
 		lightshader.setMatrix4fv("projection", projection);
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-1.0f, -1.0f, -1.0f));
+		lighty += 0.1f * deltaTime;
+		model = glm::translate(model, glm::vec3(-1.0f, lighty, -1.0f));
 		lightshader.setMatrix4fv("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
