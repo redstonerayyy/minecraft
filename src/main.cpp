@@ -257,8 +257,6 @@ int main()
 		defaultShader.setVec3("lightPos", -1.0f, lighty, -1.0f);
 		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
 
-		defaultShader.setVec3("material.ambient", 1.0f, 1.0f, 1.0f);
-		defaultShader.setVec3("material.diffuse", 1.0f, 1.0f, 1.0f);
 		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
 		defaultShader.setFloat("material.shininess", 128.0f);
 
