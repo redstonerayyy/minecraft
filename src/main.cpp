@@ -182,8 +182,8 @@ int main()
 	
 	// SHADERS
 	//TODO implement relative resource searching
-	// std::string shadereDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
-	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
+	std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
+	// std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
 	std::string fragmentpath = shaderDir + "fragment.glsl";
 	Shader defaultShader(vertexpath.c_str(), fragmentpath.c_str());
@@ -193,8 +193,8 @@ int main()
 	Shader lightshader(lightvertexpath.c_str(), lightfragmentpath.c_str());
 	
 	// TEXTURES
-	// std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
-	std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
+	std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
+	// std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
 	unsigned int texture = makeTexture(textureDir + "diamond_ore.png");
 	
 	// VERTEX DATA
@@ -260,10 +260,15 @@ int main()
 		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
 		defaultShader.setFloat("material.shininess", 128.0f);
 
+		defaultShader.setVec3("light.direction", -10.0f, lighty, 10.0f);
+		defaultShader.setBool("light.isDirectional", false);
 		defaultShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
 		defaultShader.setVec3("light.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
-		defaultShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
-		
+		defaultShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		defaultShader.setFloat("light.constant", 1.0f);
+		defaultShader.setFloat("light.linear", 0.045f);
+		defaultShader.setFloat("light.quadratic", 0.0075f);
+
 		int cubesize = 30;
 		//draw cubes
 		for (float i = 0.0f; i < cubesize; i++) {
@@ -286,7 +291,7 @@ int main()
 		lightshader.setMatrix4fv("projection", projection);
 		glm::mat4 model = glm::mat4(1.0f);
 		lighty += 0.1f * deltaTime;
-		model = glm::translate(model, glm::vec3(-1.0f, lighty, -1.0f));
+		model = glm::translate(model, glm::vec3(-10.0f, lighty, 10.0f));
 		lightshader.setMatrix4fv("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
