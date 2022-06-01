@@ -185,7 +185,7 @@ int main()
 	std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
 	// std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
-	std::string fragmentpath = shaderDir + "fragment.glsl";
+	std::string fragmentpath = shaderDir + "light_proto.glsl";
 	Shader defaultShader(vertexpath.c_str(), fragmentpath.c_str());
 	
 	std::string lightvertexpath = shaderDir + "lightvertex.glsl";
@@ -251,23 +251,42 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//vertex data, shaders
+		////vertex data, shaders
 		cube->use();
-		defaultShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-		defaultShader.setVec3("lightPos", -1.0f, lighty, -1.0f);
-		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
+		defaultShader.setVec3("viewpos", cameraPos.x, cameraPos.y, cameraPos.z);
+		
+		defaultShader.setVec3("dirLight.direction", 0.0f, -1.0f, 0.0f);
+		defaultShader.setVec3("dirLight.ambient",  0.2f, 0.2f, 0.2f);
+		defaultShader.setVec3("dirLight.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
+		defaultShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
 
 		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
 		defaultShader.setFloat("material.shininess", 128.0f);
 
-		defaultShader.setVec3("light.direction", -10.0f, lighty, 10.0f);
-		defaultShader.setBool("light.isDirectional", false);
-		defaultShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
-		defaultShader.setVec3("light.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
-		defaultShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		defaultShader.setFloat("light.constant", 1.0f);
-		defaultShader.setFloat("light.linear", 0.045f);
-		defaultShader.setFloat("light.quadratic", 0.0075f);
+		defaultShader.setVec3("pointLights[0].position", -10.0f, lighty, 10.0f);
+		defaultShader.setVec3("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
+		defaultShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f); // darken diffuse light a bit
+		defaultShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		defaultShader.setFloat("pointLights[0].constant", 1.0f);
+		defaultShader.setFloat("pointLights[0].linear", 0.045f);
+		defaultShader.setFloat("pointLights[0].quadratic", 0.0075f);
+
+		//defaultShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		//defaultShader.setVec3("lightPos", -1.0f, lighty, -1.0f);
+		//defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
+
+		//defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
+		//defaultShader.setFloat("material.shininess", 128.0f);
+
+		//defaultShader.setVec3("light.direction", -10.0f, lighty, 10.0f);
+		//defaultShader.setBool("light.isDirectional", false);
+		//defaultShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
+		//defaultShader.setVec3("light.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
+		//defaultShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		//defaultShader.setFloat("light.constant", 1.0f);
+		//defaultShader.setFloat("light.linear", 0.045f);
+		//defaultShader.setFloat("light.quadratic", 0.0075f);
+
 
 		int cubesize = 30;
 		//draw cubes
