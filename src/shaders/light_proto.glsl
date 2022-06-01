@@ -36,9 +36,7 @@ struct Material {
 }; 
   
 uniform Material material;
-
 uniform sampler2D texture0;
-// uniform vec3 lightPos;
 uniform vec3 viewPos;
 
 out vec4 FragColor;
@@ -53,7 +51,7 @@ void main()
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
     // phase 2: Point lights
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
-        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);    
+        //result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);    
     
     FragColor = texture2D(texture0, TexCoord) * vec4(result, 1.0);
 }

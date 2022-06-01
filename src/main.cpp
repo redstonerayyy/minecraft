@@ -152,7 +152,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//MSAA 4x
-	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_SAMPLES, 8);
 
 	GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
@@ -253,17 +253,18 @@ int main()
 
 		////vertex data, shaders
 		cube->use();
-		defaultShader.setVec3("viewpos", cameraPos.x, cameraPos.y, cameraPos.z);
+		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
+		
+		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
+		defaultShader.setFloat("material.shininess", 32.0f);
 		
 		defaultShader.setVec3("dirLight.direction", 0.0f, -1.0f, 0.0f);
 		defaultShader.setVec3("dirLight.ambient",  0.2f, 0.2f, 0.2f);
 		defaultShader.setVec3("dirLight.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
 		defaultShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
 
-		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
-		defaultShader.setFloat("material.shininess", 128.0f);
 
-		defaultShader.setVec3("pointLights[0].position", -10.0f, lighty, 10.0f);
+		defaultShader.setVec3("pointLights[0].position", -1.0f, -1.0f, -1.0f);
 		defaultShader.setVec3("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
 		defaultShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f); // darken diffuse light a bit
 		defaultShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
@@ -310,7 +311,7 @@ int main()
 		lightshader.setMatrix4fv("projection", projection);
 		glm::mat4 model = glm::mat4(1.0f);
 		lighty += 0.1f * deltaTime;
-		model = glm::translate(model, glm::vec3(-10.0f, lighty, 10.0f));
+		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
 		lightshader.setMatrix4fv("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
