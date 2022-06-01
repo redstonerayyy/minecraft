@@ -255,7 +255,16 @@ int main()
 		cube->use();
 		defaultShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		defaultShader.setVec3("lightPos", -1.0f, lighty, -1.0f);
-		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z); 
+		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
+
+		defaultShader.setVec3("material.ambient", 1.0f, 1.0f, 1.0f);
+		defaultShader.setVec3("material.diffuse", 1.0f, 1.0f, 1.0f);
+		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
+		defaultShader.setFloat("material.shininess", 128.0f);
+
+		defaultShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
+		defaultShader.setVec3("light.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
+		defaultShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
 		
 		int cubesize = 30;
 		//draw cubes
