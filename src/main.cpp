@@ -258,7 +258,7 @@ int main()
 		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
 		defaultShader.setFloat("material.shininess", 32.0f);
 		
-		defaultShader.setVec3("dirLight.direction", 0.0f, -1.0f, 0.0f);
+		defaultShader.setVec3("dirLight.direction", -1.0f, -0.0f, 0.0f);
 		defaultShader.setVec3("dirLight.ambient",  0.2f, 0.2f, 0.2f);
 		defaultShader.setVec3("dirLight.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
 		defaultShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
