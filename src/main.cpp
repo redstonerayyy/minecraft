@@ -182,8 +182,8 @@ int main()
 	
 	// SHADERS
 	//TODO implement relative resource searching
-	std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
-	// std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
+	// std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
+	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
 	std::string fragmentpath = shaderDir + "light_proto.glsl";
 	Shader defaultShader(vertexpath.c_str(), fragmentpath.c_str());
@@ -193,8 +193,8 @@ int main()
 	Shader lightshader(lightvertexpath.c_str(), lightfragmentpath.c_str());
 	
 	// TEXTURES
-	std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
-	// std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
+	//std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
+	std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
 	unsigned int texture = makeTexture(textureDir + "diamond_ore.png");
 	
 	// VERTEX DATA
@@ -258,7 +258,7 @@ int main()
 		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
 		defaultShader.setFloat("material.shininess", 32.0f);
 		
-		defaultShader.setVec3("dirLight.direction", -1.0f, -0.0f, 0.0f);
+		defaultShader.setVec3("dirLight.direction", -1.0f, 0.0f, 0.0f);
 		defaultShader.setVec3("dirLight.ambient",  0.2f, 0.2f, 0.2f);
 		defaultShader.setVec3("dirLight.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
 		defaultShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);

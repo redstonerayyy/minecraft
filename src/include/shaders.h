@@ -29,7 +29,7 @@ public:
     void setFloat(const std::string &name, float value);
     void setMatrix4fv(const std::string& name, glm::mat4 trans);
     void setVec3(const std::string& name, float x, float y, float z);
-    void Shader::setVec4(const std::string& name, float x, float y, float z, float w);
+    void setVec4(const std::string& name, float x, float y, float z, float w);
 };
 
 #endif
