@@ -1,12 +1,14 @@
 #include "mesh.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices) {
-	this->data.vbos.push_back(new VBO(vertices));
+	VBO verts(vertices);
+	this->data->vbos.push_back(verts);
 	generateMesh();
 }
 
 void Mesh::setIndices(std::vector<unsigned int> indices) {
-	this->data.ebos.push_back(new EBO(indices));
+	EBO inds(indices);
+	this->data->ebos.push_back(inds);
 	generateMesh();
 }
 
@@ -15,11 +17,11 @@ void Mesh::setTexture(Texture texture) {
 }
 
 void Mesh::generateMesh() {
-	this->data.fillFirst();
+	this->data->fillFirst();
 }
 
 void Mesh::drawMesh(Shader &shader) {
-	this->data.bint();
+	this->data->bind();
 	glDrawElements(GL_TRIANGLES, this->data->ebos[0].indices.size(), GL_UNSIGNED_INT, 0);
 	//glBindVertexArray(0);
 }

@@ -2,6 +2,7 @@
 #define STRUCTS_H
 
 #include <glm.hpp>
+#include <string>
 
 struct Vertex {
 	glm::vec3 Position;
