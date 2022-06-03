@@ -1,26 +1,24 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <std::vector>
-
-struct Vertex;
-struct Texture;
+#include <vector>
+#include "structs.h"
+#include "buffers.h"
+#include "shaders.h"
 
 class Mesh {
 public:
 	// mesh data
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
+	VAO* data = new VAO();
 	std::vector<Texture> textures;
 	
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+	Mesh(std::vector<Vertex> vertices);
+	
+	void setIndices(std::vector<unsigned int> indices);
+	void setTexture(Texture texture);
 
-	void Draw(Shader &shader);
-
-private:
-	// render data
-	unsigned int VAO, VBO, EBO;
-	void setupMesh();
+	void generateMesh();
+	void drawMesh(Shader &shader);
 };
 
 #endif

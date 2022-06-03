@@ -51,7 +51,7 @@ void main()
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
     // phase 2: Point lights
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
-        //result += CalcPointLight(pointLights[i], norm, FragPos, viewDir); 
+        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir); 
     
     FragColor = texture2D(texture0, TexCoord) * vec4(result, 1.0);
 }
@@ -68,7 +68,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 ambient  = light.ambient  * vec3(texture(texture0, TexCoord));
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(texture0, TexCoord));
     vec3 specular = light.specular * spec * vec3(1.0f, 0.0f, 0.0f);
-    // return (ambient + diffuse + specular);
+    //return (ambient + diffuse + specular);
     return (ambient + diffuse);
 } 
 

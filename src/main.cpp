@@ -9,8 +9,10 @@
 
 //self-defined management classes for opengl
 #include "shaders.h"
-#include "buffers.h"
+//#include "buffers.h"
 #include "textures.h"
+#include "structs.h"
+#include "mesh.h"
 
 //advanced calculation stuff
 #include <glm.hpp>
@@ -182,8 +184,8 @@ int main()
 	
 	// SHADERS
 	//TODO implement relative resource searching
-	// std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
-	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
+	std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
+	//std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
 	std::string fragmentpath = shaderDir + "light_proto.glsl";
 	Shader defaultShader(vertexpath.c_str(), fragmentpath.c_str());
@@ -193,8 +195,8 @@ int main()
 	Shader lightshader(lightvertexpath.c_str(), lightfragmentpath.c_str());
 	
 	// TEXTURES
-	//std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
-	std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
+	std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
+	//std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
 	unsigned int texture = makeTexture(textureDir + "diamond_ore.png");
 	
 	// VERTEX DATA
@@ -202,21 +204,16 @@ int main()
 	
 	#include "vertexdata.h"
 
-	VAO* cube = new VAO();
-	cube->fillVBO(cube_vertices, sizeof(cube_vertices));
-	//vertex cordinate
-	cube->setAttrib(0, 3, GL_FLOAT, false, 8, 0);
-	//texture cordinte
-	cube->setAttrib(1, 2, GL_FLOAT, false, 8, 3);
-	cube->setAttrib(2, 3, GL_FLOAT, false, 8, 5);
-	cube->fillEBO(indices, sizeof(indices));
 
-
-	VAO* light = new VAO();
-	light->fillVBO(light_vertices, sizeof(light_vertices));
-	light->setAttrib(0, 3, GL_FLOAT, false, 3, 0);
-	light->fillEBO(indices, sizeof(indices));
-
+	std::vector<Vertex> wallvet;
+	for (int i = 0; i < sizeof(wall_vertices); i += 8) {
+		Vertex vert;
+		vert.Position = glm::vec3(wall_vertices[i], wall_vertices[i + 1], wall_vertices[i + 2]);
+		vert.TexCoords = glm::vec2(wall_vertices[i + 3], wall_vertices[i + 4]);
+		vert.Normal = glm::vec3(wall_vertices[i + 5], wall_vertices[i + 6], wall_vertices[i + 7]);
+		wallvet.push_back(vert);
+	}
+	Mesh wall(wallvet);
 
 	// RENDER OPTIONS
 	// Wireframes
@@ -252,17 +249,16 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		////vertex data, shaders
-		cube->use();
+		
 		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
 		
 		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
 		defaultShader.setFloat("material.shininess", 32.0f);
 		
-		defaultShader.setVec3("dirLight.direction", -1.0f, 0.0f, 0.0f);
-		defaultShader.setVec3("dirLight.ambient",  0.2f, 0.2f, 0.2f);
+		defaultShader.setVec3("dirLight.direction", 0.0f, -1.0f, 0.0f);
+		defaultShader.setVec3("dirLight.ambient",  1.0f, 1.0f, 1.0f);
 		defaultShader.setVec3("dirLight.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
 		defaultShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
-
 
 		defaultShader.setVec3("pointLights[0].position", -1.0f, -1.0f, -1.0f);
 		defaultShader.setVec3("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
@@ -272,48 +268,6 @@ int main()
 		defaultShader.setFloat("pointLights[0].linear", 0.045f);
 		defaultShader.setFloat("pointLights[0].quadratic", 0.0075f);
 
-		//defaultShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-		//defaultShader.setVec3("lightPos", -1.0f, lighty, -1.0f);
-		//defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
-
-		//defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
-		//defaultShader.setFloat("material.shininess", 128.0f);
-
-		//defaultShader.setVec3("light.direction", -10.0f, lighty, 10.0f);
-		//defaultShader.setBool("light.isDirectional", false);
-		//defaultShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
-		//defaultShader.setVec3("light.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
-		//defaultShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		//defaultShader.setFloat("light.constant", 1.0f);
-		//defaultShader.setFloat("light.linear", 0.045f);
-		//defaultShader.setFloat("light.quadratic", 0.0075f);
-
-
-		int cubesize = 30;
-		//draw cubes
-		for (float i = 0.0f; i < cubesize; i++) {
-			for (float j = 0.0f; j < cubesize; j++) {
-				for (float k = 0.0f; k < cubesize; k++) {
-					glm::mat4 model = glm::mat4(1.0f);
-					model = glm::translate(model, glm::vec3(i, j, k));
-					defaultShader.setMatrix4fv("model", model);
-					glDrawArrays(GL_TRIANGLES, 0, 36);
-				}
-			}
-		}
-
-
-		//DRAW LIGHT
-
-		light->use();
-		lightshader.use();
-		lightshader.setMatrix4fv("view", view);
-		lightshader.setMatrix4fv("projection", projection);
-		glm::mat4 model = glm::mat4(1.0f);
-		lighty += 0.1f * deltaTime;
-		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
-		lightshader.setMatrix4fv("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		//GLFW updating the window
 		glfwSwapBuffers(window);
