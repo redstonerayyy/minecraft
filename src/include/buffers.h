@@ -7,7 +7,6 @@
 #include <vector>
 #include "structs.h"
 
-struct VertexAttribPointer;
 class VBO;
 class EBO;
 

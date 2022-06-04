@@ -9,8 +9,8 @@
 
 //self-defined management classes for opengl
 #include "shaders.h"
-//#include "buffers.h"
 #include "textures.h"
+#include "buffers.h"
 #include "structs.h"
 #include "mesh.h"
 
@@ -198,28 +198,49 @@ int main()
 	std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
 	//std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
 	unsigned int texture = makeTexture(textureDir + "diamond_ore.png");
-	
+
 	// VERTEX DATA
 	// vertices, indices, cube position -> moved to other file
 	
 	#include "vertexdata.h"
 
-
-	std::vector<Vertex> wallvet;
-	for (int i = 0; i < sizeof(wall_vertices); i += 8) {
+	std::vector<Vertex> wallvert;
+	for (int i = 0; i < sizeof(wall_vertices)/sizeof(float); i += 8) {
 		Vertex vert;
 		vert.Position = glm::vec3(wall_vertices[i], wall_vertices[i + 1], wall_vertices[i + 2]);
 		vert.TexCoords = glm::vec2(wall_vertices[i + 3], wall_vertices[i + 4]);
 		vert.Normal = glm::vec3(wall_vertices[i + 5], wall_vertices[i + 6], wall_vertices[i + 7]);
-		wallvet.push_back(vert);
+		wallvert.push_back(vert);
 	}
-	Mesh wall(wallvet);
+
+	std::vector<Vertex> cubevert;
+	for (int i = 0; i < sizeof(cube_vertices) / sizeof(float); i += 8) {
+		Vertex vert;
+		vert.Position = glm::vec3(cube_vertices[i], cube_vertices[i + 1], cube_vertices[i + 2]);
+		vert.TexCoords = glm::vec2(cube_vertices[i + 3], cube_vertices[i + 4]);
+		vert.Normal = glm::vec3(cube_vertices[i + 5], cube_vertices[i + 6], cube_vertices[i + 7]);
+		cubevert.push_back(vert);
+	}
+
+	/*Mesh wall(wallvet);
+
+	std::vector<unsigned int> inds;
+	for (int i = 0; i < sizeof(indices)/sizeof(unsigned int); i++) {
+		inds.push_back(indices[i]);
+	}
+	wall.setIndices(inds);*/
+
+	VAO* test = new VAO();
+	VBO verts(cubevert);
+	test->vbos.push_back(verts);
+	test->fillFirst();
+	
 
 	// RENDER OPTIONS
 	// Wireframes
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	//avoid random drawing, not continous geometry
+	//avoid random drawing and not continous geometry
 	glEnable(GL_DEPTH_TEST);
 
 	//MSAA
@@ -252,7 +273,7 @@ int main()
 		
 		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
 		
-		defaultShader.setVec3("material.specular", 0.0f, 1.0f, 0.0f);
+		defaultShader.setVec3("material.specular", 1.0f, 0.0f, 0.0f);
 		defaultShader.setFloat("material.shininess", 32.0f);
 		
 		defaultShader.setVec3("dirLight.direction", 0.0f, -1.0f, 0.0f);
@@ -268,8 +289,14 @@ int main()
 		defaultShader.setFloat("pointLights[0].linear", 0.045f);
 		defaultShader.setFloat("pointLights[0].quadratic", 0.0075f);
 
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
+		defaultShader.setMatrix4fv("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		// wall.drawMesh(defaultShader);
 
 		//GLFW updating the window
+		std::cout << glGetError() << std::endl;
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

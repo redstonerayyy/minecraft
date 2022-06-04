@@ -3,7 +3,6 @@
 Mesh::Mesh(std::vector<Vertex> vertices) {
 	VBO verts(vertices);
 	this->data->vbos.push_back(verts);
-	generateMesh();
 }
 
 void Mesh::setIndices(std::vector<unsigned int> indices) {

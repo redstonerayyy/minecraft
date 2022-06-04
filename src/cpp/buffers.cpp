@@ -1,14 +1,5 @@
 #include "buffers.h"
 
-struct VertexAttribPointer {
-	int attribID;
-	int length;
-	int type;
-	bool normalized;
-	int stride;
-	int offset;
-};
-
 //VAO
 VAO::VAO() {
 	glGenVertexArrays(1, &this->vaoID);
@@ -24,11 +15,14 @@ void VAO::fillFirst() {
 	this->setAttribPointer(0, 3, GL_FLOAT, false, 8, 0);
 	this->setAttribPointer(1, 2, GL_FLOAT, false, 8, 3);
 	this->setAttribPointer(2, 3, GL_FLOAT, false, 8, 5);
-	this->vbos[1].fillBuffer();
+	if (this->ebos.size() > 0) {
+		this->ebos[0].fillBuffer();
+	}
 }
 
 void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset) {
 	this->bind();
+	glEnableVertexAttribArray(attribID);
 	glVertexAttribPointer(
 		attribID, 
 		length, 
@@ -37,7 +31,6 @@ void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, 
 		stride * sizeof(float), 
 		(void*)(offset * sizeof(float))
 	);
-	glEnableVertexAttribArray(attribID);
 }
 
 //VBO
@@ -48,6 +41,7 @@ VBO::VBO(std::vector<Vertex> vertices) {
 
 void VBO::fillBuffer() {
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
+	std::cout << sizeof(this->vertices[0]) << ":" << sizeof(&this->vertices[0]) << std::endl;
 	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(this->vertices[0]), &this->vertices[0], GL_STATIC_DRAW);
 }
 
