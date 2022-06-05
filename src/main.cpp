@@ -122,7 +122,7 @@ void processInput(GLFWwindow* window)
 	frameTimeAddition += deltaTime;
 	fps += 1.0f;
 	if (frameTimeAddition > 1.0f) {
-		std::cout << fps << std::endl;
+		//std::cout << fps << std::endl;
 		fps = 0.0f;
 		frameTimeAddition = 0.0f;
 	}
