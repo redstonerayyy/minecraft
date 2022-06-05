@@ -22,7 +22,6 @@ void VAO::fillFirst() {
 
 void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset) {
 	this->bind();
-	glEnableVertexAttribArray(attribID);
 	glVertexAttribPointer(
 		attribID, 
 		length, 
@@ -31,6 +30,7 @@ void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, 
 		stride * sizeof(float), 
 		(void*)(offset * sizeof(float))
 	);
+	glEnableVertexAttribArray(attribID);
 }
 
 //VBO
