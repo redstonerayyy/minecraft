@@ -224,18 +224,18 @@ int main()
 		cubevert.push_back(vert);
 	}
 
-	/*Mesh wall(wallvet);
+	Mesh wall(wallvert);
 
 	std::vector<unsigned int> inds;
 	for (int i = 0; i < sizeof(indices)/sizeof(unsigned int); i++) {
 		inds.push_back(indices[i]);
 	}
-	wall.setIndices(inds);*/
+	wall.setIndices(inds);
 
-	VAO* test = new VAO();
-	VBO verts(cubevert);
-	test->vbos.push_back(verts);
-	test->fillFirst();
+	//VAO* test = new VAO();
+	//VBO verts(cubevert);
+	//test->vbos.push_back(verts);
+	//test->fillFirst();
 	
 
 	// RENDER OPTIONS
@@ -280,14 +280,14 @@ int main()
 		defaultShader.setFloat("material.shininess", 32.0f);
 		
 		defaultShader.setVec3("dirLight.direction", 0.0f, -1.0f, 0.0f);
-		defaultShader.setVec3("dirLight.ambient",  1.0f, 1.0f, 1.0f);
-		defaultShader.setVec3("dirLight.diffuse",  0.8f, 0.8f, 0.8f); // darken diffuse light a bit
+		defaultShader.setVec3("dirLight.ambient",  0.2f, 0.2f, 0.2f);
+		defaultShader.setVec3("dirLight.diffuse",  0.4f, 0.4f, 0.4f); // darken diffuse light a bit
 		defaultShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
 
 		defaultShader.setVec3("pointLights[0].position", -1.0f, -1.0f, -1.0f);
 		defaultShader.setVec3("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
-		defaultShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f); // darken diffuse light a bit
-		defaultShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		defaultShader.setVec3("pointLights[0].diffuse", 0.4f, 0.4f, 0.4f); // darken diffuse light a bit
+		defaultShader.setVec3("pointLights[0].specular", 1.0f, 0.0f, 0.0f);
 		defaultShader.setFloat("pointLights[0].constant", 1.0f);
 		defaultShader.setFloat("pointLights[0].linear", 0.045f);
 		defaultShader.setFloat("pointLights[0].quadratic", 0.0075f);
@@ -297,8 +297,8 @@ int main()
 		defaultShader.setMatrix4fv("model", model);
 		glEnable(GL_TEXTURE_2D);
 		glActiveTexture(GL_TEXTURE0);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		// wall.drawMesh(defaultShader);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		wall.drawMesh(defaultShader);
 
 		//GLFW updating the window
 		//std::cout << glGetError() << std::endl;

@@ -55,8 +55,7 @@ void main()
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir); 
     
-    //FragColor = vec4(TexCoord.x * TexCoord.x, TexCoord.y * TexCoord.y, 1.0, 1.0); //texture(tex_sampler, TexCoord); * vec4(result, 1.0);
-    FragColor = texture(tex_sampler, TexCoord);
+    FragColor = texture(tex_sampler, TexCoord) * vec4(result, 1.0);
 }
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
