@@ -215,15 +215,6 @@ int main()
 		wallvert.push_back(vert);
 	}
 
-	std::vector<Vertex> cubevert;
-	for (int i = 0; i < sizeof(cube_vertices) / sizeof(float); i += 8) {
-		Vertex vert;
-		vert.Position = glm::vec3(cube_vertices[i], cube_vertices[i + 1], cube_vertices[i + 2]);
-		vert.TexCoords = glm::vec2(cube_vertices[i + 3], cube_vertices[i + 4]);
-		vert.Normal = glm::vec3(cube_vertices[i + 5], cube_vertices[i + 6], cube_vertices[i + 7]);
-		cubevert.push_back(vert);
-	}
-
 	Mesh wall(wallvert);
 
 	std::vector<unsigned int> inds;
