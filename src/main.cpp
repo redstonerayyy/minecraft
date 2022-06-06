@@ -13,8 +13,8 @@
 #include "buffers.h"
 #include "structs.h"
 #include "mesh.h"
-#include "PerlinNoise.hpp"
-//#include "worldgen.h"
+// #include "PerlinNoise.hpp"
+#include "worldgen.h"
 
 //advanced calculation stuff
 #include <glm.hpp>
@@ -130,7 +130,7 @@ void processInput(GLFWwindow* window)
 	}
 
 	//move camera
-	const float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
+	const float cameraSpeed = 10.0f * deltaTime; // adjust accordingly
 	//forward, backward, left, right
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraPos += cameraSpeed * cameraFront;
@@ -211,41 +211,55 @@ int main()
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> mesh_indices;
 
-	const siv::PerlinNoise::seed_type seed = 123456u;
+	smoothWorld(vertices, mesh_indices);
+	
+	// const siv::PerlinNoise::seed_type seed = 123456u;
 
-	const siv::PerlinNoise perlin{ seed };
+	// const siv::PerlinNoise perlin{ seed };
 
-	int size = 100;
+	// int size = 100;
 
-	for (float z = 0.0f; z < size; z++)
-	{
-		for (float x = 0.0f; x < size; x++)
-		{
-			const double noise = perlin.octave2D_01((x * 0.01), (z * 0.01), 4);
-			Vertex vert;
-			vert.Position = glm::vec3(x, floor((float)noise * 20), z);
-			vert.TexCoords = glm::vec2(1.0f, 1.0f);
-			vert.Normal = glm::vec3(0.0f, 0.0f, 0.0f);
-			vertices.push_back(vert);
-			// std::cout << vertices.size() << "." << vert.Position.x << ":" << vert.Position.y << ":" << vert.Position.z << std::endl;
-		}
-	}
+	// for (float z = 0.0f; z < size; z++)
+	// {
+	// 	for (float x = 0.0f; x < size; x++)
+	// 	{
+	// 		const double noise = perlin.octave2D_01((x * 0.01), (z * 0.01), 4);
+	// 		Vertex vert;
+	// 		vert.Position = glm::vec3(x, floor((float)noise * 20), z);
+	// 		vert.TexCoords = glm::vec2(1.0f, 1.0f);
+	// 		vert.Normal = glm::vec3(0.0f, 0.0f, 0.0f);
+	// 		vertices.push_back(vert);
+	// 		// std::cout << vertices.size() << "." << vert.Position.x << ":" << vert.Position.y << ":" << vert.Position.z << std::endl;
+	// 	}
+	// }
 
-	for (unsigned int z = 0; z < size - 1; z++)
-	{
-		for (unsigned int x = 0; x < size - 1; x++)
-		{
-			unsigned int triangleone[] = { z * size + x, (z + 1) * size + x, (z + 1) * size + x + 1 };
-			unsigned int triangletwo[] = { z * size + x, z * size + x + 1, (z + 1) * size + x + 1 };
-			mesh_indices.insert(mesh_indices.end(), triangleone, triangleone + 3);
-			mesh_indices.insert(mesh_indices.end(), triangletwo, triangletwo + 3);
+	// for (unsigned int z = 0; z < size - 1; z++)
+	// {
+	// 	for (unsigned int x = 0; x < size - 1; x++)
+	// 	{
+	// 		unsigned int triangleone[] = { z * size + x, (z + 1) * size + x, (z + 1) * size + x + 1 };
+	// 		unsigned int triangletwo[] = { z * size + x, z * size + x + 1, (z + 1) * size + x + 1 };
+	// 		mesh_indices.insert(mesh_indices.end(), triangleone, triangleone + 3);
+	// 		mesh_indices.insert(mesh_indices.end(), triangletwo, triangletwo + 3);
 			
-			//calculate normals
-			
+	// 		//calculate normals
+	// 		glm::vec3 vec1_1 = vertices[triangleone[1]].Position - vertices[triangleone[0]].Position;
+	// 		glm::vec3 vec2_1 = vertices[triangleone[2]].Position - vertices[triangleone[0]].Position;
+	// 		glm::vec3 normal1 = glm::normalize(glm::cross(vec1_1, vec2_1));
 
-			//std::cout << mesh_indices.size() << "." << z << ":" << z + size << ":" << z + size + 1 << "::" << z << ":" << z + size - 1 << ":" << z + size + 1 << std::endl;
-		}
-	}
+	// 		vertices[triangleone[0]].Normal = normal1;
+	// 		vertices[triangleone[1]].Normal = normal1;
+	// 		vertices[triangleone[2]].Normal = normal1;
+
+	// 		glm::vec3 vec1_2 = vertices[triangletwo[1]].Position - vertices[triangletwo[0]].Position;
+	// 		glm::vec3 vec2_2 = vertices[triangletwo[2]].Position - vertices[triangletwo[0]].Position;
+	// 		glm::vec3 normal2 = glm::normalize(glm::cross(vec1_2, vec2_2));
+
+	// 		vertices[triangletwo[0]].Normal = normal2;
+	// 		vertices[triangletwo[1]].Normal = normal2;
+	// 		vertices[triangletwo[2]].Normal = normal2;
+	// 	}
+	// }
 
 	// smoothWorld(vertices, mesh_indices);
 	// for(int i = 0; i < vertices.size(); i++){
@@ -300,7 +314,7 @@ int main()
 		defaultShader.setMatrix4fv("view", view);
 
 		//projection matrix, view space to device cordinates
-		glm::mat4 projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 200.0f);
 		defaultShader.setMatrix4fv("projection", projection);
 
 		// DRAWING
@@ -317,8 +331,8 @@ int main()
 		defaultShader.setFloat("material.shininess", 32.0f);
 		
 		defaultShader.setVec3("dirLight.direction", 0.0f, -1.0f, 0.0f);
-		defaultShader.setVec3("dirLight.ambient",  0.2f, 0.2f, 0.2f);
-		defaultShader.setVec3("dirLight.diffuse",  0.4f, 0.4f, 0.4f); // darken diffuse light a bit
+		defaultShader.setVec3("dirLight.ambient",  0.4f, 0.4f, 0.4f);
+		defaultShader.setVec3("dirLight.diffuse",  0.6f, 0.6f, 0.6f); // darken diffuse light a bit
 		defaultShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
 
 		defaultShader.setVec3("pointLights[0].position", -1.0f, -1.0f, -1.0f);
@@ -336,7 +350,7 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		//glDrawArrays(GL_TRIANGLES, 0, 36);
 		wall.drawMesh(defaultShader);
-
+		
 		//GLFW updating the window
 		//std::cout << glGetError() << std::endl;
 		glfwSwapBuffers(window);
