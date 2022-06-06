@@ -3,7 +3,6 @@
 in vec3 FragPos;
 in vec2 TexCoord;
 in vec3 Normal;
-in vec4 color;
 
 struct DirLight {
     vec3 direction;
