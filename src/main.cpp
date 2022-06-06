@@ -13,6 +13,7 @@
 #include "buffers.h"
 #include "structs.h"
 #include "mesh.h"
+#include "worldgen.h"
 
 //advanced calculation stuff
 #include <glm.hpp>
@@ -184,8 +185,8 @@ int main()
 	
 	// SHADERS
 	//TODO implement relative resource searching
-	// std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
-	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
+	std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
+	//std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
 	std::string fragmentpath = shaderDir + "light_proto.glsl";
 	Shader defaultShader(vertexpath.c_str(), fragmentpath.c_str());
@@ -195,8 +196,8 @@ int main()
 	Shader lightshader(lightvertexpath.c_str(), lightfragmentpath.c_str());
 	
 	// TEXTURES
-	// std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
-	std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
+	std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
+	//std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	unsigned int texture = makeTexture(textureDir + "diamond_ore.png");
@@ -205,6 +206,8 @@ int main()
 	// vertices, indices, cube position -> moved to other file
 	
 	#include "vertexdata.h"
+
+	smoothWorld();
 
 	std::vector<Vertex> wallvert;
 	for (int i = 0; i < sizeof(wall_vertices)/sizeof(float); i += 8) {
