@@ -29,11 +29,9 @@ unsigned int makeTexture(std::string filename){
 	if (data)
 	{
 		if (nrChannels == 3) {
-			std::cout << 3 << std::endl;
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		}
 		else if (nrChannels == 4) {
-			std::cout << 4 << std::endl;
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		}
 		glGenerateMipmap(GL_TEXTURE_2D);

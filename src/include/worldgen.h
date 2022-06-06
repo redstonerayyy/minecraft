@@ -5,6 +5,6 @@
 #include "PerlinNoise.hpp"
 #include "structs.h"
 
-std::vector<Vertex> smoothWorld();
+void smoothWorld(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
 
 #endif

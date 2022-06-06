@@ -13,7 +13,8 @@
 #include "buffers.h"
 #include "structs.h"
 #include "mesh.h"
-#include "worldgen.h"
+#include "PerlinNoise.hpp"
+//#include "worldgen.h"
 
 //advanced calculation stuff
 #include <glm.hpp>
@@ -185,8 +186,8 @@ int main()
 	
 	// SHADERS
 	//TODO implement relative resource searching
-	std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
-	//std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
+	//std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
+	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
 	std::string fragmentpath = shaderDir + "light_proto.glsl";
 	Shader defaultShader(vertexpath.c_str(), fragmentpath.c_str());
@@ -196,8 +197,8 @@ int main()
 	Shader lightshader(lightvertexpath.c_str(), lightfragmentpath.c_str());
 	
 	// TEXTURES
-	std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
-	//std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
+	//std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
+	std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	unsigned int texture = makeTexture(textureDir + "diamond_ore.png");
@@ -207,24 +208,66 @@ int main()
 	
 	#include "vertexdata.h"
 
-	smoothWorld();
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> mesh_indices;
 
-	std::vector<Vertex> wallvert;
-	for (int i = 0; i < sizeof(wall_vertices)/sizeof(float); i += 8) {
-		Vertex vert;
-		vert.Position = glm::vec3(wall_vertices[i], wall_vertices[i + 1], wall_vertices[i + 2]);
-		vert.TexCoords = glm::vec2(wall_vertices[i + 3], wall_vertices[i + 4]);
-		vert.Normal = glm::vec3(wall_vertices[i + 5], wall_vertices[i + 6], wall_vertices[i + 7]);
-		wallvert.push_back(vert);
+	const siv::PerlinNoise::seed_type seed = 123456u;
+
+	const siv::PerlinNoise perlin{ seed };
+
+	int size = 100;
+
+	for (float z = 0.0f; z < size; z++)
+	{
+		for (float x = 0.0f; x < size; x++)
+		{
+			const double noise = perlin.octave2D_01((x * 0.01), (z * 0.01), 4);
+			Vertex vert;
+			vert.Position = glm::vec3(x, floor((float)noise * 20), z);
+			vert.TexCoords = glm::vec2(1.0f, 1.0f);
+			vert.Normal = glm::vec3(0.0f, 0.0f, 0.0f);
+			vertices.push_back(vert);
+			// std::cout << vertices.size() << "." << vert.Position.x << ":" << vert.Position.y << ":" << vert.Position.z << std::endl;
+		}
 	}
 
-	Mesh wall(wallvert);
+	for (unsigned int z = 0; z < size - 1; z++)
+	{
+		for (unsigned int x = 0; x < size - 1; x++)
+		{
+			unsigned int triangleone[] = { z * size + x, (z + 1) * size + x, (z + 1) * size + x + 1 };
+			unsigned int triangletwo[] = { z * size + x, z * size + x + 1, (z + 1) * size + x + 1 };
+			mesh_indices.insert(mesh_indices.end(), triangleone, triangleone + 3);
+			mesh_indices.insert(mesh_indices.end(), triangletwo, triangletwo + 3);
+			
+			//calculate normals
+			
+
+			//std::cout << mesh_indices.size() << "." << z << ":" << z + size << ":" << z + size + 1 << "::" << z << ":" << z + size - 1 << ":" << z + size + 1 << std::endl;
+		}
+	}
+
+	// smoothWorld(vertices, mesh_indices);
+	// for(int i = 0; i < vertices.size(); i++){
+	// 	std::cout << vertices[i].Position.z << std::endl;
+	// }
+
+	// std::vector<Vertex> wallvert;
+	// for (int i = 0; i < sizeof(wall_vertices)/sizeof(float); i += 8) {
+	// 	Vertex vert;
+	// 	vert.Position = glm::vec3(wall_vertices[i], wall_vertices[i + 1], wall_vertices[i + 2]);
+	// 	vert.TexCoords = glm::vec2(wall_vertices[i + 3], wall_vertices[i + 4]);
+	// 	vert.Normal = glm::vec3(wall_vertices[i + 5], wall_vertices[i + 6], wall_vertices[i + 7]);
+	// 	wallvert.push_back(vert);
+	// }
+
+	Mesh wall(vertices);
 
 	std::vector<unsigned int> inds;
-	for (int i = 0; i < sizeof(indices)/sizeof(unsigned int); i++) {
-		inds.push_back(indices[i]);
-	}
-	wall.setIndices(inds);
+	// for (int i = 0; i < sizeof(indices)/sizeof(unsigned int); i++) {
+	// 	inds.push_back(indices[i]);
+	// }
+	wall.setIndices(mesh_indices);
 
 	//VAO* test = new VAO();
 	//VBO verts(cubevert);

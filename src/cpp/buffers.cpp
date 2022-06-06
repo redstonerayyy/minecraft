@@ -41,7 +41,6 @@ VBO::VBO(std::vector<Vertex> vertices) {
 
 void VBO::fillBuffer() {
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
-	std::cout << sizeof(this->vertices[0]) << ":" << sizeof(&this->vertices[0]) << std::endl;
 	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(this->vertices[0]), &this->vertices[0], GL_STATIC_DRAW);
 }
 
