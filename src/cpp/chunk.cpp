@@ -1,36 +1,77 @@
-std::array<float> generateHeightMap(int width, int depth, std::string seed) {
+
+void generateHeightMap(int width, int depth, std::vector<float> * heightmap, std::string seed) {
 	const siv::PerlinNoise::seed_type seed = seed;
 	const siv::PerlinNoise perlin{ seed };
-
-	std::array<float, width * depth> heightmap; //xz
 
 	for (int x = 0; x < width; x++) {
 		for (int z = 0; z < depth; z++) {
 			const float noise = perlin.octave2D_01((x * 0.01), (z * 0.01), 4);
-			heightmap[x + z] = noise;
+			heightmap.push_back(noise);
 		}
 	}
-	return heightmap;
+	
 }
 
 Chunk::Chunk(int chunkWidth, int baseHeight) {
-	std::array<float> heightMap = generateHeightMap(chunkWidth, chunkWidth, "abc");
+	std::vector<float> heightMap;
+	generateHeightMap(chunkWidth, chunkWidth, &heightMap, "abc");
 	std::array<unsigned int, 16 * 256 * 16> chunkBlocks; //xyz
 
 	//generate blocks
 	for (int x = 0; x < 16; x++) {
 		for (int y = 0; y < 256; y++) {
 			for (int z = 0; z < 16; z++) {
-				if (floor(heightMap[x + z] * baseHeight) < y) {
-					chunkBlocks[x + y + z] = MC_AIR;
+				if (floor(heightMap[x * 16 + z] * baseHeight) < y) {
+					chunkBlocks[x * 16 + y * 256 + z] = MC_AIR;
 				} else {
-					chunkBlocks[x + y + z] = MC_STONE;
+					chunkBlocks[x * 16 + y * 256 + z] = MC_STONE;
 				}
 			}
 		}
 	}
 
 	//generate mesh
+	for (int x = 0; x < 16; x++) {
+		for (int y = 0; y < 256; y++) {
+			for (int z = 0; z < 16; z++) {
+				if (chunkBlocks[x * 16 + y * 256 + z] == MC_AIR) {
+				} else {
+					//is MC_STONE check which sides are air
+					if(y + 1 <= 256){//check if out of bounds
+						if(chunkBlocks[x * 16 + (y + 1) * 256 + z] == MC_AIR){//y + 1
+							
+						}
+					}
+					if(y - 1 >= 0){//check if out of bounds
+						if(chunkBlocks[x * 16 + (y - 1) * 256 + z] == MC_AIR){//y - 1
+
+						}
+					}
+					if(x + 1 <= 16){//check if out of bounds
+						if(chunkBlocks[(x + 1) * 16 + y * 256 + z] == MC_AIR){//x + 1
+
+						}
+					}
+					if(x - 1 >= 0){//check if out of bounds
+						if(chunkBlocks[(x - 1) * 16 + y * 256 + z] == MC_AIR){//x - 1
+
+						}
+					}
+					if(z + 1 <= 16){//check if out of bounds
+						if(chunkBlocks[x * 16 + y * 256 + z + 1] == MC_AIR){//z + 1
+
+						}
+					}
+					if(z - 1 >= 0){//check if out of bounds
+						if(chunkBlocks[x * 16 + y * 256 + z - 1] == MC_AIR){//z - 1
+
+						}
+					}
+				}
+			}
+		}
+	}
+
 
 	for (unsigned int z = 0; z < size - 1; z++)
 	{

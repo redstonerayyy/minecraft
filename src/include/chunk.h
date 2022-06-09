@@ -7,10 +7,8 @@
 class Chunk {
 public:
 	Chunk(int chunkWidth, int baseHeight);
-
-
 };
 
-std::array<float> generateHeightMap(int width, int depth, std::string seed);
+void generateHeightMap(int width, int depth, std::vector<float> * heightmap, std::string seed);
 
 #endif // !CHUNK_H
