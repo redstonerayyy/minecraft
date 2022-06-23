@@ -27,8 +27,11 @@ include_directories(glfw/deps)
 include_directories(src/include)
 include_directories(lib/include)
 
-FILE(GLOB SOURCE_FILES src/cpp/*.cpp)
+#FILE(GLOB SOURCE_FILES src/cpp/*.cpp)
+FILE(GLOB SOURCE_FILES_MESHES src/cpp/meshes/*.cpp)
+FILE(GLOB SOURCE_FILES_OPENGL src/cpp/opengl/*.cpp)
+FILE(GLOB SOURCE_FILES_UTIL src/cpp/util/*.cpp)
 
-add_executable(opengl src/main.cpp ${SOURCE_FILES} glfw/deps/glad_gl.c)
+add_executable(opengl src/main.cpp ${SOURCE_FILES} ${SOURCE_FILES_MESHES} ${SOURCE_FILES_OPENGL} ${SOURCE_FILES_UTIL} glfw/deps/glad_gl.c)
 
 target_link_libraries(opengl ${OPENGL_LIBRARIES} glfw)
