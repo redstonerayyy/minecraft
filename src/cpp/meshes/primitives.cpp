@@ -1,12 +1,6 @@
 #include "primitives.h"
 
-float triangle[3][3] = {
-	{0.0f, 0.0f, 0.0f},
-	{0.0, -1.0f, 0.0f},
-	{1.0f, 0.0f, 0.0f},
-};
-
-Vertex createVertex(float * position, float tex1, float tex2, float nvecx, float nvecy, float nvecz){
+Vertex createVertex(const float * position, float tex1, float tex2, float nvecx, float nvecy, float nvecz){
 	Vertex vert;
 	vert.Position = glm::vec3(position[0], position[1], position[2]);
 	vert.TexCoords = glm::vec2(tex1, tex2);
@@ -16,7 +10,6 @@ Vertex createVertex(float * position, float tex1, float tex2, float nvecx, float
 
 
 void generateTriangle(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices){
-	
 	int verticeslength = vertices.size();
 	vertices.push_back(createVertex(triangle[0], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
 	indices.push_back(verticeslength);

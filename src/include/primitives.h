@@ -2,8 +2,8 @@
 #define PRIMITIVES_H
 
 #include "structs.h"
-//#include "primitivedata.h"
-#include "enums.h"
+#include "primitivedata.h"
+//#include "enums.h"
 #include "meshtransform.h"
 
 #include <vector>
