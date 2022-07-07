@@ -13,6 +13,7 @@
 #include "buffers.h"
 #include "structs.h"
 #include "mesh.h"
+#include "primitives.h"
 // #include "PerlinNoise.hpp"
 #include "worldgen.h"
 #include "chunk.h"
@@ -213,6 +214,7 @@ int main()
 	std::vector<unsigned int> mesh_indices;
 
 	//smoothWorld(vertices, mesh_indices);
+	generateTriangle(vertices, mesh_indices);
 	//Chunk* world = new Chunk(16, 100, vertices, mesh_indices);
 	
 
