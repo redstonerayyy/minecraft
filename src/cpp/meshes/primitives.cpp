@@ -45,3 +45,28 @@ void generateSquare(std::vector<Vertex> &vertices, std::vector<unsigned int> &in
 	indices.push_back(verticeslength + 2);
 	indices.push_back(verticeslength + 3);
 }
+
+void generateCube(std::vector<Vertex> &vertices, std::vector<unsigned int> &mesh_indices, float pvector[3], int sides[6]){
+	const float shiftzero[3] = {0.0f, 0.0f, 0.0f};
+	const float shiftx[3] = {-1.0f, 0.0f, 0.0f};
+	const float shifty[3] = {0.0f, 1.0f, 0.0f};
+	const float shiftz[3] = {0.0f, 0.0f, -1.0f};
+	if(sides[0]){//right
+		generateSquare(vertices, mesh_indices, squarex, shiftzero, pvector);
+	}
+	if(sides[1]){//bottom
+		generateSquare(vertices, mesh_indices, squarey, shiftzero, pvector);
+	}
+	if(sides[2]){//front
+		generateSquare(vertices, mesh_indices, squarez, shiftzero, pvector);
+	}
+	if(sides[3]){//left
+		generateSquare(vertices, mesh_indices, squarex, shiftx, pvector);
+	}
+	if(sides[4]){//top
+		generateSquare(vertices, mesh_indices, squarey, shifty, pvector);
+	}
+	if(sides[5]){//back
+		generateSquare(vertices, mesh_indices, squarez, shiftz, pvector);
+	}
+}

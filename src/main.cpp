@@ -215,17 +215,9 @@ int main()
 	std::vector<unsigned int> mesh_indices;
 
 	//smoothWorld(vertices, mesh_indices);
-	const float shiftzero[3] = {0.0f, 0.0f, 0.0f};
-	const float shiftx[3] = {-1.0f, 0.0f, 0.0f};
-	const float shifty[3] = {0.0f, 1.0f, 0.0f};
-	const float shiftz[3] = {0.0f, 0.0f, -1.0f};
-	float pvector[3] = { 100.0f, 10.0f, 10.0f };
-	generateSquare(vertices, mesh_indices, squarex, shiftzero, pvector);
-	generateSquare(vertices, mesh_indices, squarey, shiftzero, pvector);
-	generateSquare(vertices, mesh_indices, squarez, shiftzero, pvector);
-	generateSquare(vertices, mesh_indices, squarex, shiftx, pvector);
-	generateSquare(vertices, mesh_indices, squarey, shifty, pvector);
-	generateSquare(vertices, mesh_indices, squarez, shiftz, pvector);
+	float transvec[3] = {5.0f, 5.0f, 5.0f};
+	int cubesides[6] = { 1, 1, 1, 1, 1, 1};
+	generateCube(vertices, mesh_indices, transvec, cubesides);
 	
 	//Chunk* world = new Chunk(16, 100, vertices, mesh_indices);
 	
