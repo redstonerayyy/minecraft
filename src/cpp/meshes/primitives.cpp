@@ -19,13 +19,18 @@ void generateTriangle(std::vector<Vertex> &vertices, std::vector<unsigned int> &
 	indices.push_back(verticeslength + 2);
 }
 
-void generateSquare(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, const float squarecords[4][3], const float cordshift[3]){
+void generateSquare(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, const float squarecords[4][3], const float cordshift[3], float pvector[3]){
 	int verticeslength = vertices.size();
+	glm::mat4 transmat = glm::translate(glm::mat4(1.0f), glm::vec3(pvector[0], pvector[1], pvector[2]));
 	float squarecordsnew[4][3];
 	for(int i = 0; i < 4; i++){
 		for(int j = 0; j < 3; j++){
 			squarecordsnew[i][j] = squarecords[i][j] + cordshift[j];
 		}
+		glm::vec4 temp = transmat * glm::vec4(squarecordsnew[i][0], squarecordsnew[i][1], squarecordsnew[i][2], 1.0f);
+		squarecordsnew[i][0] = temp.x;
+		squarecordsnew[i][1] = temp.y;
+		squarecordsnew[i][2] = temp.z;
 	}
 	vertices.push_back(createVertex(squarecordsnew[0], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
 	vertices.push_back(createVertex(squarecordsnew[1], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
