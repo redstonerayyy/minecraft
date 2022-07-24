@@ -32,6 +32,7 @@ void generateSquare(std::vector<Vertex> &vertices, std::vector<unsigned int> &in
 		squarecordsnew[i][1] = temp.y;
 		squarecordsnew[i][2] = temp.z;
 	}
+	//create vertices
 	vertices.push_back(createVertex(squarecordsnew[0], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
 	vertices.push_back(createVertex(squarecordsnew[1], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
 	vertices.push_back(createVertex(squarecordsnew[2], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
@@ -40,7 +41,7 @@ void generateSquare(std::vector<Vertex> &vertices, std::vector<unsigned int> &in
 	indices.push_back(verticeslength);
 	indices.push_back(verticeslength + 1);
 	indices.push_back(verticeslength + 3);
-	//seconds triangle
+	//second triangle
 	indices.push_back(verticeslength + 1);
 	indices.push_back(verticeslength + 2);
 	indices.push_back(verticeslength + 3);

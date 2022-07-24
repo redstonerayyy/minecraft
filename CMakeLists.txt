@@ -1,37 +1,48 @@
+#project and settings
 CMAKE_MINIMUM_REQUIRED(VERSION 3.22)
 set (CMAKE_CXX_STANDARD 17)
 
 project(opengl)
 
+#find opengl
 find_package(OpenGL REQUIRED)
 
 if (OPENGL_FOUND)
     message("opengl found")
     message("include dir: ${OPENGL_INCLUDE_DIR}")
-    message("link libraries: ${OPENGL_gl_LIBRARY}")
 else (OPENGL_FOUND)
     message("opengl not found")
 endif()
 
-include_directories(${OPENGL_INCLUDE_DIRS})
 
+#build glfw
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/glfw)
 
-include_directories(glm)
-include_directories(glfw/include)
-include_directories(glfw/deps)
-include_directories(src/include)
-include_directories(lib/include)
 
-#FILE(GLOB SOURCE_FILES src/cpp/*.cpp)
-FILE(GLOB SOURCE_FILES_MESHES src/cpp/meshes/*.cpp)
-FILE(GLOB SOURCE_FILES_OPENGL src/cpp/opengl/*.cpp)
-FILE(GLOB SOURCE_FILES_UTIL src/cpp/util/*.cpp)
+#build minecraft
+#source files
+FILE(GLOB SOURCE_FILES src/cpp/**/*.cpp)
+#add target
+add_executable(opengl src/main.cpp ${SOURCE_FILES} glfw/deps/glad_gl.c)
 
-add_executable(opengl src/main.cpp ${SOURCE_FILES} ${SOURCE_FILES_MESHES} ${SOURCE_FILES_OPENGL} ${SOURCE_FILES_UTIL} glfw/deps/glad_gl.c)
+#include dirs
+#libraries
+target_include_directories(opengl PRIVATE ${OPENGL_INCLUDE_DIRS})
+target_include_directories(opengl PRIVATE glm)
+target_include_directories(opengl PRIVATE glfw/include)
+target_include_directories(opengl PRIVATE glfw/deps)
+target_include_directories(opengl PRIVATE lib/include)
+#source headers
+target_include_directories(opengl PRIVATE src/include/meshes)
+target_include_directories(opengl PRIVATE src/include/opengl)
+target_include_directories(opengl PRIVATE src/include/util)
+target_include_directories(opengl PRIVATE src/include/drawing)
+target_include_directories(opengl PRIVATE src/include/game)
+target_include_directories(opengl PRIVATE src/include/general)
 
+#link libraries
 target_link_libraries(opengl ${OPENGL_LIBRARIES} glfw)

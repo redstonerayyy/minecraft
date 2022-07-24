@@ -4,7 +4,11 @@
 #include "structs.h"
 #include "primitivedata.h"
 //#include "enums.h"
-#include "meshtransform.h"
+//#include "meshtransform.h"
+
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 #include <vector>
 
