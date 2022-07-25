@@ -8,17 +8,6 @@ Vertex createVertex(const float * position, float tex1, float tex2, float nvecx,
 	return vert;
 }
 
-
-void generateTriangle(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices){
-	int verticeslength = vertices.size();
-	vertices.push_back(createVertex(triangle[0], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
-	vertices.push_back(createVertex(triangle[1], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
-	vertices.push_back(createVertex(triangle[2], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
-	indices.push_back(verticeslength);
-	indices.push_back(verticeslength + 1);
-	indices.push_back(verticeslength + 2);
-}
-
 void generateSquare(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, const float squarecords[4][3], const float cordshift[3], float pvector[3]){
 	int verticeslength = vertices.size();
 	glm::mat4 transmat = glm::translate(glm::mat4(1.0f), glm::vec3(pvector[0], pvector[1], pvector[2]));
@@ -33,14 +22,14 @@ void generateSquare(std::vector<Vertex> &vertices, std::vector<unsigned int> &in
 		squarecordsnew[i][2] = temp.z;
 	}
 	//create vertices
-	vertices.push_back(createVertex(squarecordsnew[0], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
-	vertices.push_back(createVertex(squarecordsnew[1], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
-	vertices.push_back(createVertex(squarecordsnew[2], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
-	vertices.push_back(createVertex(squarecordsnew[3], 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
+	vertices.push_back(createVertex(squarecordsnew[0], defaulttexcoords[0][0], defaulttexcoords[0][1], 1.0f, 1.0f, 1.0f));
+	vertices.push_back(createVertex(squarecordsnew[1], defaulttexcoords[1][0], defaulttexcoords[1][1], 1.0f, 1.0f, 1.0f));
+	vertices.push_back(createVertex(squarecordsnew[2], defaulttexcoords[2][0], defaulttexcoords[2][1], 1.0f, 1.0f, 1.0f));
+	vertices.push_back(createVertex(squarecordsnew[3], defaulttexcoords[3][0], defaulttexcoords[3][1], 1.0f, 1.0f, 1.0f));
 	//first triangle
 	indices.push_back(verticeslength);
 	indices.push_back(verticeslength + 1);
-	indices.push_back(verticeslength + 3);
+	indices.push_back(verticeslength + 2);
 	//second triangle
 	indices.push_back(verticeslength + 1);
 	indices.push_back(verticeslength + 2);
@@ -52,7 +41,7 @@ void generateCube(std::vector<Vertex> &vertices, std::vector<unsigned int> &mesh
 	const float shiftx[3] = {-1.0f, 0.0f, 0.0f};
 	const float shifty[3] = {0.0f, 1.0f, 0.0f};
 	const float shiftz[3] = {0.0f, 0.0f, -1.0f};
-	if(sides[0]){//right
+	if(sides[0]){//left
 		generateSquare(vertices, mesh_indices, squarex, shiftzero, pvector);
 	}
 	if(sides[1]){//bottom
