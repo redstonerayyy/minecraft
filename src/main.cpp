@@ -17,6 +17,7 @@
 // #include "PerlinNoise.hpp"
 #include "worldgen.h"
 #include "chunk.h"
+#include "utils.h"
 
 //advanced calculation stuff
 #include <glm.hpp>
@@ -214,9 +215,11 @@ int main()
 	std::vector<unsigned int> mesh_indices;
 
 	//smoothWorld(vertices, mesh_indices);
-	for(float i = 0; i < 5; i++){
-		for(float j = 0; j < 5; j++){
-			float transvec[3] = {i, 0.0f, j};
+	float size = 200.0f;
+	std::vector<float> noisemap = generateNoiseMap(size, size, 111);
+	for(float i = 0; i < size; i++){
+		for(float j = 0; j < size; j++){
+			float transvec[3] = {i, froundf(100 * noisemap[i * size + j]), j};
 			int cubesides[6] = { 0, 0, 0, 0, 1, 0};
 			generateCube(vertices, mesh_indices, transvec, cubesides);
 		}

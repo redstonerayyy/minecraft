@@ -1,21 +1,17 @@
 #include "worldgen.h"
-#include <array>
 
-void smoothWorld(std::vector<Vertex> &vertices, std::vector<unsigned int> &mesh_indices) {
-
-	const siv::PerlinNoise::seed_type seed = 123456u;
-
+std::vector<float> generateNoiseMap(int width, int depth, long unsigned int heightmapseed) {
+	const siv::PerlinNoise::seed_type seed = heightmapseed;
 	const siv::PerlinNoise perlin{ seed };
 
-	int size = 100;
-
-	for (double z = 0.0f; z < size; z++)
-	{
-		for (double x = 0.0f; x < size; x++)
-		{
-			const double noise = perlin.octave2D_01((x * 0.01), (z * 0.01), 4);
-			Vertex vert;
-			vert.Position = glm::vec3(x, floor((float)noise * 20), z);
+	std::vector<float> noisemap;
+	//scale and octaves as parameters
+	for (int x = 0; x < width; x++) {
+		for (int z = 0; z < depth; z++) {
+			const float noise = perlin.octave2D_01((x * 0.01), (z * 0.01), 4);
+			noisemap.push_back(noise);
 		}
 	}
-};
+
+	return noisemap;
+}

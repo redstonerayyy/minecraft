@@ -3,8 +3,7 @@
 
 #include <iostream>
 #include "PerlinNoise.hpp"
-#include "structs.h"
 
-
+std::vector<float> generateNoiseMap(int width, int depth, long unsigned int heightmapseed);
 
 #endif

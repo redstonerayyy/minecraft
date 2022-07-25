@@ -36,3 +36,11 @@ std::string readStringFromFile(const char* filePath) {
 		return NULL;
 	};
 }
+
+float froundf(float f) {
+  	return (float)floor(f + 0.5);
+}
+
+int froundi(float f) {
+  	return (int)floor(f + 0.5);
+}
