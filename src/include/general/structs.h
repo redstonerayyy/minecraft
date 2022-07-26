@@ -10,7 +10,7 @@ struct Vertex {
 	glm::vec3 Normal;
 };
 
-struct Texture {
+struct TextureStruct {
 	unsigned int id;
 	std::string type;
 	std::string name;

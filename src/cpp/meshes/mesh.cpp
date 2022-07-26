@@ -11,7 +11,7 @@ void Mesh::setIndices(std::vector<unsigned int> indices) {
 	generateMesh();
 }
 
-void Mesh::setTexture(Texture texture) {
+void Mesh::setTexture(TextureStruct texture) {
 	this->textures.push_back(texture);
 }
 

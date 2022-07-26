@@ -14,7 +14,7 @@
 #include "structs.h"
 #include "mesh.h"
 #include "primitives.h"
-// #include "PerlinNoise.hpp"
+#include "fileslist.h"
 #include "worldgen.h"
 #include "chunk.h"
 #include "utils.h"
@@ -201,15 +201,13 @@ int main()
 	
 	// TEXTURES
 	//std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
-	std::string textureDir = "/home/anton/Github/minecraft/src/textures/";
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	unsigned int texture = makeTexture(textureDir + "diamond_ore.png");
+	unsigned int texture1 = makeTexture(texturedir + "diamond_ore.png");
+	glActiveTexture(GL_TEXTURE0 + 1);
+	unsigned int texture2 = Texture(texturedir + "gold_ore.png").textureid;
 
 	// VERTEX DATA
-	// vertices, indices, cube position -> moved to other file
-	
-	#include "vertexdata.h"
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> mesh_indices;
@@ -281,6 +279,7 @@ int main()
 		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
 		
 		defaultShader.setInt("tex_sampler", 0);
+		defaultShader.setInt("tex_sampler_two", 1);
 		defaultShader.setVec3("material.specular", 1.0f, 0.0f, 0.0f);
 		defaultShader.setFloat("material.shininess", 32.0f);
 		
@@ -300,8 +299,8 @@ int main()
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
 		defaultShader.setMatrix4fv("model", model);
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
+		// glEnable(GL_TEXTURE_2D);
+		// glActiveTexture(GL_TEXTURE0);
 		//glDrawArrays(GL_TRIANGLES, 0, 36);
 		wall.drawMesh(defaultShader);
 		

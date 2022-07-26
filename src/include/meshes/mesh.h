@@ -10,12 +10,12 @@ class Mesh {
 public:
 	// mesh data
 	VAO* data = new VAO();
-	std::vector<Texture> textures;
+	std::vector<TextureStruct> textures;
 	
 	Mesh(std::vector<Vertex> vertices);
 	
 	void setIndices(std::vector<unsigned int> indices);
-	void setTexture(Texture texture);
+	void setTexture(TextureStruct texture);
 
 	void generateMesh();
 	void drawMesh(Shader &shader);

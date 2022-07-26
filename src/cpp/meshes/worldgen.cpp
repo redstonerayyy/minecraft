@@ -14,4 +14,4 @@ std::vector<float> generateNoiseMap(int width, int depth, long unsigned int heig
 	}
 
 	return noisemap;
-}
+};
