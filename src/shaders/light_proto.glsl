@@ -10,7 +10,8 @@ struct DirLight {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-};  
+};
+
 uniform DirLight dirLight;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
@@ -25,7 +26,8 @@ struct PointLight {
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-};  
+};
+  
 #define NR_POINT_LIGHTS 1
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 

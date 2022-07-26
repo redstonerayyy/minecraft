@@ -192,13 +192,13 @@ int main()
 	//std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
 	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
-	std::string fragmentpath = shaderDir + "light_proto.glsl";
+	std::string fragmentpath = shaderDir + "light_new.glsl";
 	std::vector<Shader> shaders;
 	shaders.push_back(Shader(GL_VERTEX_SHADER, vertexpath.c_str()));
 	shaders.push_back(Shader(GL_FRAGMENT_SHADER, fragmentpath.c_str()));
 	ShaderProgram defaultShader(shaders);
 	
-	std::string lightvertexpath = shaderDir + "lightvertex.glsl";
+	std::string lightvertexpath = shaderDir + "light_vertex.glsl";
 	std::string lightfragmentpath = shaderDir + "light.glsl";
 	std::vector<Shader> lightshaders;
 	lightshaders.push_back(Shader(GL_VERTEX_SHADER, lightvertexpath.c_str()));
@@ -224,7 +224,7 @@ int main()
 	for(float i = 0; i < size; i++){
 		for(float j = 0; j < size; j++){
 			float transvec[3] = {i, froundf(100 * noisemap[i * size + j]), j};
-			int cubesides[6] = { 0, 0, 0, 0, 1, 0};
+			int cubesides[6] = { 1, 1, 1, 1, 1, 1};
 			generateCube(vertices, indices, transvec, cubesides);
 		}
 	}
