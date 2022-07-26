@@ -210,7 +210,7 @@ int main()
 	// VERTEX DATA
 
 	std::vector<Vertex> vertices;
-	std::vector<unsigned int> mesh_indices;
+	std::vector<unsigned int> indices;
 
 	//smoothWorld(vertices, mesh_indices);
 	float size = 200.0f;
@@ -219,13 +219,14 @@ int main()
 		for(float j = 0; j < size; j++){
 			float transvec[3] = {i, froundf(100 * noisemap[i * size + j]), j};
 			int cubesides[6] = { 0, 0, 0, 0, 1, 0};
-			generateCube(vertices, mesh_indices, transvec, cubesides);
+			generateCube(vertices, indices, transvec, cubesides);
 		}
 	}
 
-	Mesh wall(vertices);
-
-	wall.setIndices(mesh_indices);	
+	Mesh world;
+	world.addVBO(vertices);
+	world.addEBO(indices);
+	world.generateBuffers();
 
 	// RENDER OPTIONS
 	// Wireframes
@@ -288,7 +289,7 @@ int main()
 		// glEnable(GL_TEXTURE_2D);
 		// glActiveTexture(GL_TEXTURE0);
 		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		wall.drawMesh(defaultShader);
+		world.drawMesh(defaultShader);
 		
 		//GLFW updating the window
 		//std::cout << glGetError() << std::endl;

@@ -13,6 +13,8 @@ class EBO;
 class VAO {
 public:
 	unsigned int vaoID;
+	unsigned int vboslength;
+	unsigned int eboslength;
 	std::vector<VBO> vbos;
 	std::vector<EBO> ebos;
 	

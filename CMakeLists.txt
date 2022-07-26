@@ -22,7 +22,6 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/glfw)
 
-
 #build minecraft
 #source files
 FILE(GLOB SOURCE_FILES src/cpp/**/*.cpp)
@@ -30,19 +29,20 @@ FILE(GLOB SOURCE_FILES src/cpp/**/*.cpp)
 add_executable(opengl src/main.cpp ${SOURCE_FILES} glfw/deps/glad_gl.c)
 
 #include dirs
+
 #libraries
 target_include_directories(opengl PRIVATE ${OPENGL_INCLUDE_DIRS})
 target_include_directories(opengl PRIVATE glm)
 target_include_directories(opengl PRIVATE glfw/include)
 target_include_directories(opengl PRIVATE glfw/deps)
 target_include_directories(opengl PRIVATE lib/include)
+
 #source headers
+target_include_directories(opengl PRIVATE src/include/game)
+target_include_directories(opengl PRIVATE src/include/general)
 target_include_directories(opengl PRIVATE src/include/meshes)
 target_include_directories(opengl PRIVATE src/include/opengl)
 target_include_directories(opengl PRIVATE src/include/util)
-target_include_directories(opengl PRIVATE src/include/drawing)
-target_include_directories(opengl PRIVATE src/include/game)
-target_include_directories(opengl PRIVATE src/include/general)
 
 #link libraries
 target_link_libraries(opengl ${OPENGL_LIBRARIES} glfw)

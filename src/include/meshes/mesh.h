@@ -9,15 +9,12 @@
 class Mesh {
 public:
 	// mesh data
-	VAO* data = new VAO();
-	std::vector<TextureStruct> textures;
+	VAO* vao = new VAO();
 	
-	Mesh(std::vector<Vertex> vertices);
-	
-	void setIndices(std::vector<unsigned int> indices);
-	void setTexture(TextureStruct texture);
+	void addVBO(std::vector<Vertex> vertices);
+	void addEBO(std::vector<unsigned int> indices);
 
-	void generateMesh();
+	void generateBuffers();
 	void drawMesh(Shader &shader);
 };
 

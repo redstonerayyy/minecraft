@@ -1,26 +1,19 @@
 #include "mesh.h"
 
-Mesh::Mesh(std::vector<Vertex> vertices) {
-	VBO verts(vertices);
-	this->data->vbos.push_back(verts);
+void Mesh::addVBO(std::vector<Vertex> vertices){
+	this->vao->vbos.push_back(VBO(vertices));
 }
 
-void Mesh::setIndices(std::vector<unsigned int> indices) {
-	EBO inds(indices);
-	this->data->ebos.push_back(inds);
-	generateMesh();
+void Mesh::addEBO(std::vector<unsigned int> indices){
+	this->vao->ebos.push_back(EBO(indices));
 }
 
-void Mesh::setTexture(TextureStruct texture) {
-	this->textures.push_back(texture);
-}
-
-void Mesh::generateMesh() {
-	this->data->fillFirst();
+void Mesh::generateBuffers() {
+	this->vao->fill();
 }
 
 void Mesh::drawMesh(Shader &shader) {
-	this->data->bind();
-	glDrawElements(GL_TRIANGLES, this->data->ebos[0].indices.size(), GL_UNSIGNED_INT, 0);
-	//glBindVertexArray(0);
+	this->vao->bind();
+	glDrawElements(GL_TRIANGLES, this->vao->eboslength, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }

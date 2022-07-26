@@ -12,26 +12,30 @@ void VAO::bind(){
 void VAO::fill() {
 	this->bind();
 	if(0 < this->vbos.size() && this->vbos.size() < 2){
+		this->vboslength = vbos[0].vertices.size();
 		this->vbos[0].fillBuffer();
 	} else {
 		std::vector<Vertex> all_vertices;
 		for(int i = 0; i < this->vbos.size(); i++){
-			all_vertices.insert(all_vertices.end(), vbos[i].begin(), vbos[i].end());
+			all_vertices.insert(all_vertices.end(), vbos[i].vertices.begin(), vbos[i].vertices.end());
 		};
+		this->vboslength = all_vertices.size();
 		glGenBuffers(1, &this->vboallid);
 		glBindBuffer(GL_ARRAY_BUFFER, this->vboallid);
-		glBufferData(GL_ARRAY_BUFFER, this->all_vertices.size() * sizeof(this->all_vertices[0]), &this->all_vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, all_vertices.size() * sizeof(all_vertices[0]), &all_vertices[0], GL_STATIC_DRAW);
 	}
 	if(0 < this->ebos.size() && this->ebos.size() < 2){
+		this->eboslength = ebos[0].indices.size();
 		this->ebos[0].fillBuffer();
 	} else {
 		std::vector<unsigned int> all_indices;
 		for(int i = 0; i < this->ebos.size(); i++){
-			all_indices.insert(all_indices.end(), ebos[i].begin(), ebos[i].end());
+			all_indices.insert(all_indices.end(), ebos[i].indices.begin(), ebos[i].indices.end());
 		};
+		this->eboslength = all_indices.size();
 		glGenBuffers(1, &this->eboallid);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboallid);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->all_indices.size() * sizeof(this->all_indices[0]), &this->all_indices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, all_indices.size() * sizeof(all_indices[0]), &all_indices[0], GL_STATIC_DRAW);
 	}
 
 	//position, texture, normal
