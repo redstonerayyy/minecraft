@@ -15,7 +15,7 @@ public:
 	void addEBO(std::vector<unsigned int> indices);
 
 	void generateBuffers();
-	void drawMesh(Shader &shader);
+	void drawMesh(ShaderProgram &shaderprogram);
 };
 
 #endif

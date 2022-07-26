@@ -12,7 +12,7 @@ void Mesh::generateBuffers() {
 	this->vao->fill();
 }
 
-void Mesh::drawMesh(Shader &shader) {
+void Mesh::drawMesh(ShaderProgram &shaderprogram) {
 	this->vao->bind();
 	glDrawElements(GL_TRIANGLES, this->vao->eboslength, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

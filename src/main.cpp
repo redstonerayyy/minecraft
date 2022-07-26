@@ -16,8 +16,8 @@
 #include "primitives.h"
 #include "fileslist.h"
 #include "worldgen.h"
-#include "chunk.h"
 #include "utils.h"
+#include <array>
 
 //advanced calculation stuff
 #include <glm.hpp>
@@ -193,13 +193,19 @@ int main()
 	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
 	std::string fragmentpath = shaderDir + "light_proto.glsl";
-	Shader defaultShader(vertexpath.c_str(), fragmentpath.c_str());
+	std::vector<Shader> shaders;
+	shaders.push_back(Shader(GL_VERTEX_SHADER, vertexpath.c_str()));
+	shaders.push_back(Shader(GL_FRAGMENT_SHADER, fragmentpath.c_str()));
+	ShaderProgram defaultShader(shaders);
 	
 	std::string lightvertexpath = shaderDir + "lightvertex.glsl";
 	std::string lightfragmentpath = shaderDir + "light.glsl";
-	Shader lightshader(lightvertexpath.c_str(), lightfragmentpath.c_str());
-	
+	std::vector<Shader> lightshaders;
+	lightshaders.push_back(Shader(GL_VERTEX_SHADER, lightvertexpath.c_str()));
+	lightshaders.push_back(Shader(GL_FRAGMENT_SHADER, lightfragmentpath.c_str()));
+	ShaderProgram lightShader(lightshaders);
 	// TEXTURES
+
 	//std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
