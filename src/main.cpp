@@ -6,18 +6,22 @@
 //cout, calculations for opengl
 #include <iostream>
 #include <math.h>
+#include <array>
 
-//self-defined management classes for opengl
+//self-defined management classes for opengl, game classes
 #include "shaders.h"
-#include "textures.h"
 #include "buffers.h"
+#include "textures.h"
+
 #include "structs.h"
+#include "fileslist.h"
+
 #include "mesh.h"
 #include "primitives.h"
-#include "fileslist.h"
+
 #include "worldgen.h"
+
 #include "utils.h"
-#include <array>
 
 //advanced calculation stuff
 #include <glm.hpp>
@@ -211,7 +215,7 @@ int main()
 	glActiveTexture(GL_TEXTURE0);
 	Texture texture1 = Texture(texturedir + "diamond_ore.png");
 	glActiveTexture(GL_TEXTURE0 + 1);
-	Texture texture2 = Texture(texturedir + "gold_ore.png");
+	Texture texture2 = Texture(texturedir + "white.png");
 
 	// VERTEX DATA
 
@@ -223,7 +227,7 @@ int main()
 	std::vector<float> noisemap = generateNoiseMap(size, size, 111);
 	for(float i = 0; i < size; i++){
 		for(float j = 0; j < size; j++){
-			float transvec[3] = {i, froundf(100 * noisemap[i * size + j]), j};
+			float transvec[3] = {i, froundf(0.0f * noisemap[i * size + j]), j};
 			int cubesides[6] = { 1, 1, 1, 1, 1, 1};
 			generateCube(vertices, indices, transvec, cubesides);
 		}
@@ -232,7 +236,18 @@ int main()
 	Mesh world;
 	world.addVBO(vertices);
 	world.addEBO(indices);
-	world.generateBuffers();
+	world.generateBuffers(true, true, true);
+
+	std::vector<Vertex> lightvertices;
+	std::vector<unsigned int> lightindices;
+	float lightpos[3] = {5.0f, 5.0f, 5.0f};
+	int cubesides[6] = { 1, 1, 1, 1, 1, 1};
+	generateCube(lightvertices, lightindices, lightpos, cubesides);
+	Mesh light;
+	light.addVBO(lightvertices);
+	light.addEBO(lightindices);
+	light.generateBuffers(true, true, true);
+
 
 	// RENDER OPTIONS
 	// Wireframes
@@ -269,25 +284,9 @@ int main()
 
 		////vertex data, shaders
 		
+		defaultShader.setInt("tex_sampler1", 0);
+		defaultShader.setVec3("lightPos", 5.0f, 5.0f, 5.0f);
 		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
-		
-		defaultShader.setInt("tex_sampler", 0);
-		defaultShader.setInt("tex_sampler_two", 1);
-		defaultShader.setVec3("material.specular", 1.0f, 0.0f, 0.0f);
-		defaultShader.setFloat("material.shininess", 32.0f);
-		
-		defaultShader.setVec3("dirLight.direction", 0.0f, -1.0f, 0.0f);
-		defaultShader.setVec3("dirLight.ambient",  0.4f, 0.4f, 0.4f);
-		defaultShader.setVec3("dirLight.diffuse",  0.6f, 0.6f, 0.6f); // darken diffuse light a bit
-		defaultShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
-
-		defaultShader.setVec3("pointLights[0].position", -1.0f, -1.0f, -1.0f);
-		defaultShader.setVec3("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
-		defaultShader.setVec3("pointLights[0].diffuse", 0.4f, 0.4f, 0.4f); // darken diffuse light a bit
-		defaultShader.setVec3("pointLights[0].specular", 1.0f, 0.0f, 0.0f);
-		defaultShader.setFloat("pointLights[0].constant", 1.0f);
-		defaultShader.setFloat("pointLights[0].linear", 0.045f);
-		defaultShader.setFloat("pointLights[0].quadratic", 0.0075f);
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
@@ -296,7 +295,12 @@ int main()
 		// glActiveTexture(GL_TEXTURE0);
 		//glDrawArrays(GL_TRIANGLES, 0, 36);
 		world.drawMesh(defaultShader);
-		
+
+		lightShader.use();
+		lightShader.setMatrix4fv("view", view);
+		lightShader.setMatrix4fv("projection", projection);
+		lightShader.setMatrix4fv("model", model);
+		light.drawMesh(lightShader);
 		//GLFW updating the window
 		//std::cout << glGetError() << std::endl;
 		glfwSwapBuffers(window);

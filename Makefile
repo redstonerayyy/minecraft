@@ -1,5 +1,6 @@
 .PHONY: build
 build:
+	clear
 	cmake -B ./build
 	make -C ./build
 	cp ./build/opengl ./src

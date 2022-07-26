@@ -9,7 +9,7 @@ void VAO::bind(){
 	glBindVertexArray(this->vaoID);
 }
 
-void VAO::fill() {
+void VAO::fill(bool pos, bool tex, bool normal) {
 	this->bind();
 	if(0 < this->vbos.size() && this->vbos.size() < 2){
 		this->vboslength = vbos[0].vertices.size();
@@ -39,9 +39,9 @@ void VAO::fill() {
 	}
 
 	//position, texture, normal
-	this->setAttribPointer(0, 3, GL_FLOAT, false, 8, 0);
-	this->setAttribPointer(1, 2, GL_FLOAT, false, 8, 3);
-	this->setAttribPointer(2, 3, GL_FLOAT, false, 8, 5);
+	if(pos) { this->setAttribPointer(0, 3, GL_FLOAT, false, 8, 0); };
+	if(tex) { this->setAttribPointer(1, 2, GL_FLOAT, false, 8, 3); };
+	if(normal) { this->setAttribPointer(2, 3, GL_FLOAT, false, 8, 5); };
 }
 
 void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset) {

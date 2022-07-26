@@ -21,7 +21,7 @@ public:
 	VAO();
 
 	void bind();
-	void fill();
+	void fill(bool pos, bool tex, bool normal);
 	void setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset);
 
 private:

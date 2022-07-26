@@ -8,12 +8,13 @@ void Mesh::addEBO(std::vector<unsigned int> indices){
 	this->vao->ebos.push_back(EBO(indices));
 }
 
-void Mesh::generateBuffers() {
-	this->vao->fill();
+void Mesh::generateBuffers(bool pos, bool tex, bool normal) {
+	this->vao->fill(pos, tex, normal);
 }
 
 void Mesh::drawMesh(ShaderProgram &shaderprogram) {
 	this->vao->bind();
+	shaderprogram.use();
 	glDrawElements(GL_TRIANGLES, this->vao->eboslength, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
