@@ -9,15 +9,35 @@ void VAO::bind(){
 	glBindVertexArray(this->vaoID);
 }
 
-void VAO::fillFirst() {
+void VAO::fill() {
 	this->bind();
-	this->vbos[0].fillBuffer();
+	if(0 < this->vbos.size() && this->vbos.size() < 2){
+		this->vbos[0].fillBuffer();
+	} else {
+		std::vector<Vertex> all_vertices;
+		for(int i = 0; i < this->vbos.size(); i++){
+			all_vertices.insert(all_vertices.end(), vbos[i].begin(), vbos[i].end());
+		};
+		glGenBuffers(1, &this->vboallid);
+		glBindBuffer(GL_ARRAY_BUFFER, this->vboallid);
+		glBufferData(GL_ARRAY_BUFFER, this->all_vertices.size() * sizeof(this->all_vertices[0]), &this->all_vertices[0], GL_STATIC_DRAW);
+	}
+	if(0 < this->ebos.size() && this->ebos.size() < 2){
+		this->ebos[0].fillBuffer();
+	} else {
+		std::vector<unsigned int> all_indices;
+		for(int i = 0; i < this->ebos.size(); i++){
+			all_indices.insert(all_indices.end(), ebos[i].begin(), ebos[i].end());
+		};
+		glGenBuffers(1, &this->eboallid);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboallid);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->all_indices.size() * sizeof(this->all_indices[0]), &this->all_indices[0], GL_STATIC_DRAW);
+	}
+
+	//position, texture, normal
 	this->setAttribPointer(0, 3, GL_FLOAT, false, 8, 0);
 	this->setAttribPointer(1, 2, GL_FLOAT, false, 8, 3);
 	this->setAttribPointer(2, 3, GL_FLOAT, false, 8, 5);
-	if (this->ebos.size() > 0) {
-		this->ebos[0].fillBuffer();
-	}
 }
 
 void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset) {

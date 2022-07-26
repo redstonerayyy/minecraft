@@ -19,8 +19,12 @@ public:
 	VAO();
 
 	void bind();
-	void fillFirst();
+	void fill();
 	void setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset);
+
+private:
+	unsigned int vboallid;
+	unsigned int eboallid;
 };
 
 class VBO {
@@ -42,6 +46,5 @@ public:
 
 	void fillBuffer();
 };
-
 
 #endif

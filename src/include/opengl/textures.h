@@ -19,6 +19,4 @@ public:
 	void setTextureData(unsigned char * data);
 };
 
-unsigned int makeTexture(std::string filename);
-
 #endif

@@ -203,9 +203,9 @@ int main()
 	//std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
-	unsigned int texture1 = makeTexture(texturedir + "diamond_ore.png");
+	Texture texture1 = Texture(texturedir + "diamond_ore.png");
 	glActiveTexture(GL_TEXTURE0 + 1);
-	unsigned int texture2 = Texture(texturedir + "gold_ore.png").textureid;
+	Texture texture2 = Texture(texturedir + "gold_ore.png");
 
 	// VERTEX DATA
 
@@ -223,23 +223,9 @@ int main()
 		}
 	}
 
-
-	//Chunk* world = new Chunk(16, 100, vertices, mesh_indices);
-	
-
 	Mesh wall(vertices);
 
-	//std::vector<unsigned int> inds;
-	// for (int i = 0; i < sizeof(indices)/sizeof(unsigned int); i++) {
-	// 	inds.push_back(indices[i]);
-	// }
-	wall.setIndices(mesh_indices);
-
-	//VAO* test = new VAO();
-	//VBO verts(cubevert);
-	//test->vbos.push_back(verts);
-	//test->fillFirst();
-	
+	wall.setIndices(mesh_indices);	
 
 	// RENDER OPTIONS
 	// Wireframes
@@ -266,7 +252,7 @@ int main()
 		defaultShader.setMatrix4fv("view", view);
 
 		//projection matrix, view space to device cordinates
-		glm::mat4 projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 200.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 400.0f);
 		defaultShader.setMatrix4fv("projection", projection);
 
 		// DRAWING
