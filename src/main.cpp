@@ -285,7 +285,7 @@ int main()
 		////vertex data, shaders
 		
 		defaultShader.setInt("tex_sampler1", 0);
-		defaultShader.setVec3("lightPos", 5.0f, 5.0f, 5.0f);
+		defaultShader.setVec3("lightPos", -5.0f, -5.0f, -5.0f);
 		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
 
 		model = glm::mat4(1.0f);
