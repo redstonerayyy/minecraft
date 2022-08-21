@@ -1,4 +1,6 @@
 /build
 /out
-.*
+/run
+/.vscode
+
 !/.gitignore
