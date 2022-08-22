@@ -3,7 +3,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-//cout, calculations for opengl
+//STL
 #include <iostream>
 #include <math.h>
 #include <array>
@@ -12,6 +12,7 @@
 #include "shaders.h"
 #include "buffers.h"
 #include "textures.h"
+#include "camera.hpp"
 
 #include "structs.h"
 #include "fileslist.h"
@@ -28,18 +29,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-
-// GLOBALs
-//camera position
-glm::vec3 cameraPos = glm::vec3(5.0f, 5.0f, 5.0f);
-glm::vec3 cameraFront = glm::vec3(1.0f, 0.0f, 0.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-//camera rotation
-float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
-float pitch = 0.0f;
-//camera field of view
-float fov = 45.0f;
+Camera maincam = Camera();
 
 
 //light
@@ -90,31 +80,20 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
-	yaw += xoffset;
-	pitch += yoffset;
+	maincam.yaw += xoffset;
+	maincam.pitch += yoffset;
 
 	// make sure that when pitch is out of bounds, screen doesn't get flipped
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
+	if (maincam.pitch > 89.0f)
+		maincam.pitch = 89.0f;
+	if (maincam.pitch < -89.0f)
+		maincam.pitch = -89.0f;
 
 	glm::vec3 front;
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	cameraFront = glm::normalize(front);
-}
-
-//zoom by changing fov
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	fov -= (float)yoffset;
-	if (fov < 1.0f)
-		fov = 1.0f;
-	if (fov > 45.0f)
-		fov = 45.0f;
-	projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
+	front.x = cos(glm::radians(maincam.yaw)) * cos(glm::radians(maincam.pitch));
+	front.y = sin(glm::radians(maincam.pitch));
+	front.z = sin(glm::radians(maincam.yaw)) * cos(glm::radians(maincam.pitch));
+	maincam.camerafront = glm::normalize(front);
 }
 
 //react to input
@@ -140,18 +119,18 @@ void processInput(GLFWwindow* window)
 	const float cameraSpeed = 10.0f * deltaTime; // adjust accordingly
 	//forward, backward, left, right
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraPos += cameraSpeed * cameraFront;
+		maincam.camerapos += cameraSpeed * maincam.camerafront;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraPos -= cameraSpeed * cameraFront;
+		maincam.camerapos -= cameraSpeed * maincam.camerafront;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		maincam.camerapos -= glm::normalize(glm::cross(maincam.camerafront, maincam.cameraup)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		maincam.camerapos += glm::normalize(glm::cross(maincam.camerafront, maincam.cameraup)) * cameraSpeed;
 	//up, down
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		cameraPos += cameraUp * cameraSpeed;
+		maincam.camerapos += maincam.cameraup * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-		cameraPos -= cameraUp * cameraSpeed;
+		maincam.camerapos -= maincam.cameraup * cameraSpeed;
 }
 
 
@@ -162,9 +141,11 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//MSAA 4x
-	glfwWindowHint(GLFW_SAMPLES, 8);
 
+	//MSAA 4x
+	glfwWindowHint(GLFW_SAMPLES, 4);
+
+	//create GLFW window
 	GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
 	if (window == NULL)
 	{
@@ -173,6 +154,7 @@ int main()
 		return -1;
 	};
 
+	//initialize opengl
 	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress))
@@ -185,7 +167,6 @@ int main()
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scroll_callback);
 
 	// OPENGL
 	//set opengl viewport
@@ -270,11 +251,11 @@ int main()
 		// CAMERA
 		// model matrix set further down, dynamically for each object
 		//view matrix, transform world space to camera space
-		glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		glm::mat4 view = glm::lookAt(maincam.camerapos, maincam.camerapos + maincam.camerafront, maincam.cameraup);
 		defaultShader.setMatrix4fv("view", view);
 
 		//projection matrix, view space to device cordinates
-		glm::mat4 projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 400.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(maincam.fov), 800.0f / 600.0f, 0.1f, 400.0f);
 		defaultShader.setMatrix4fv("projection", projection);
 
 		// DRAWING
@@ -286,7 +267,7 @@ int main()
 		
 		defaultShader.setInt("tex_sampler1", 0);
 		defaultShader.setVec3("lightPos", -5.0f, -5.0f, -5.0f);
-		defaultShader.setVec3("viewPos", cameraPos.x, cameraPos.y, cameraPos.z);
+		defaultShader.setVec3("viewPos", maincam.camerapos.x, maincam.camerapos.y, maincam.camerapos.z);
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
