@@ -132,6 +132,7 @@ int main()
 	GLFWwindow& window = WindowInit();
 	
 	Game game = Game(&window);
+	game.time = Time();
 	//Game * gameobject = reinterpret_cast<Game *>(glfwGetWindowUserPointer(&window));
 
 	glfwSetInputMode(&window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

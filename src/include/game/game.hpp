@@ -12,8 +12,8 @@
 class Game {
 public:
     int test;
-    Camera * maincam;
-    Time * time;
+    Camera maincam;
+    Time time;
     InputManager inputmanager;
 
     Game(GLFWwindow * window);
