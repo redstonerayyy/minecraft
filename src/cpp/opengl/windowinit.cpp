@@ -5,9 +5,9 @@
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-};
+}
 
-GLFWwindow WindowInit(){
+GLFWwindow& WindowInit(){
     // GLWF
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -18,13 +18,14 @@ GLFWwindow WindowInit(){
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	//create GLFW window
-	GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
-	if (window == NULL)
+    // Hence we are working with pointers, we should use nullptr instead of NULL to clarify our intent.
+	GLFWwindow *window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
+	if (window == nullptr)
 	{
 		std::cout << "Failed to create window!" << std::endl;
 		glfwTerminate();
-		return -1;
-	};
+		return *window;
+	}
 
 	//initialize opengl
 	glfwMakeContextCurrent(window);
@@ -32,17 +33,17 @@ GLFWwindow WindowInit(){
 	if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize glad!" << std::endl;
-		return -1;
-	};
+		return *window;
+	}
 
 	//set callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPosCallback(window, mouse_callback);
+	//glfwSetCursorPosCallback(window, mouse_callback); // <- Not working for now
 
 	// OPENGL
 	//set opengl viewport
 	glViewport(0, 0, 800, 600);
 
-    return window;
+    return *window;
 }
