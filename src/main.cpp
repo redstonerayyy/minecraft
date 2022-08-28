@@ -36,14 +36,6 @@ Camera maincam = Camera();
 
 //matrices
 glm::mat4 model;
-//glm::mat4 view;
-//glm::mat4 projection;
-
-//time, fps
-float deltaTime = 0.0f;	// Time between current frame and last frame
-float lastFrame = 0.0f; // Time of last frame
-float fps = 0.0f;
-float frameTimeAddition = 0.0f;
 
 //input
 bool firstMouse = true; //set to false if mouse enters the window
@@ -92,24 +84,15 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 //react to input
 void processInput(GLFWwindow* window)
 {
+	Game * gameinfo = GetGame(window);
+	std::cout << gameinfo->time.fps << "\n";
+
 	//close
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	//log fps
-	float currentFrame = glfwGetTime();
-	deltaTime = currentFrame - lastFrame;
-	lastFrame = currentFrame;
-	frameTimeAddition += deltaTime;
-	fps += 1.0f;
-	if (frameTimeAddition > 1.0f) {
-		//std::cout << fps << std::endl;
-		fps = 0.0f;
-		frameTimeAddition = 0.0f;
-	}
-
 	//move camera
-	const float cameraSpeed = 10.0f * deltaTime; // adjust accordingly
+	const float cameraSpeed = 10.0f * gameinfo->time.deltaTime; // adjust accordingly
 	//forward, backward, left, right
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		maincam.camerapos += cameraSpeed * maincam.camerafront;
@@ -133,6 +116,7 @@ int main()
 	
 	Game game = Game(&window);
 	game.time = Time();
+
 	//Game * gameobject = reinterpret_cast<Game *>(glfwGetWindowUserPointer(&window));
 
 	glfwSetInputMode(&window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -209,6 +193,8 @@ int main()
 	// RENDER LOOP
 	while (!glfwWindowShouldClose(&window))
 	{
+		game.time.Update();
+
 		// INPUT
 		//keysboard input, mouse input
 		processInput(&window);

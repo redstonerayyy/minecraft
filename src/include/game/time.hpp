@@ -10,6 +10,7 @@ public:
     double lastTime = 0.0f;
     double frameTimeAddition = 0.0f;
     double fps = 0.0f;
+    double fpscounter = 0.0f;
 
     double Update();
 
