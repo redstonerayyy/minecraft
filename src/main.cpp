@@ -5,7 +5,7 @@
 
 //STL
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <array>
 
 //self-defined management classes for opengl, game classes
@@ -38,8 +38,8 @@ Camera maincam = Camera();
 float lighty = 1.0f;
 //matrices
 glm::mat4 model;
-glm::mat4 view;
-glm::mat4 projection;
+//glm::mat4 view;
+//glm::mat4 projection;
 
 //time, fps
 float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -56,8 +56,8 @@ float lastY = 600.0f / 2.0f;
 //not really an idea what happens, just copied from learnopengl
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
-	float xpos = static_cast<float>(xposIn);
-	float ypos = static_cast<float>(yposIn);
+	auto xpos = static_cast<float>(xposIn);
+	auto ypos = static_cast<float>(yposIn);
 
 	if (firstMouse)
 	{
@@ -131,24 +131,24 @@ void processInput(GLFWwindow* window)
 
 int main()
 {
-	GLFWwindow *window = WindowInit();
+	GLFWwindow& window = WindowInit();
 	
 	// SHADERS
 	//TODO implement relative resource searching
 	//std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
-	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
+	std::string shaderDir = "/home/marcel/Projekte/redstonerayy/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
 	std::string fragmentpath = shaderDir + "light_new.glsl";
 	std::vector<Shader> shaders;
-	shaders.push_back(Shader(GL_VERTEX_SHADER, vertexpath.c_str()));
-	shaders.push_back(Shader(GL_FRAGMENT_SHADER, fragmentpath.c_str()));
+	shaders.emplace_back(Shader(GL_VERTEX_SHADER, vertexpath.c_str()));
+	shaders.emplace_back(Shader(GL_FRAGMENT_SHADER, fragmentpath.c_str()));
 	ShaderProgram defaultShader(shaders);
 	
 	std::string lightvertexpath = shaderDir + "light_vertex.glsl";
 	std::string lightfragmentpath = shaderDir + "light.glsl";
 	std::vector<Shader> lightshaders;
-	lightshaders.push_back(Shader(GL_VERTEX_SHADER, lightvertexpath.c_str()));
-	lightshaders.push_back(Shader(GL_FRAGMENT_SHADER, lightfragmentpath.c_str()));
+	lightshaders.emplace_back(Shader(GL_VERTEX_SHADER, lightvertexpath.c_str()));
+	lightshaders.emplace_back(Shader(GL_FRAGMENT_SHADER, lightfragmentpath.c_str()));
 	ShaderProgram lightShader(lightshaders);
 	// TEXTURES
 
@@ -165,11 +165,11 @@ int main()
 	std::vector<unsigned int> indices;
 
 	//smoothWorld(vertices, mesh_indices);
-	float size = 200.0f;
+	int size = 200.0f;
 	std::vector<float> noisemap = generateNoiseMap(size, size, 111);
-	for(float i = 0; i < size; i++){
-		for(float j = 0; j < size; j++){
-			float transvec[3] = {i, froundf(0.0f * noisemap[i * size + j]), j};
+	for(int i = 0; i < size; i++){
+		for(int j = 0; j < size; j++){
+			float transvec[3] = {i*1.0f, froundf(0.0f * noisemap[i * size + j]), j*1.0f};
 			int cubesides[6] = { 1, 1, 1, 1, 1, 1};
 			generateCube(vertices, indices, transvec, cubesides);
 		}
@@ -202,11 +202,11 @@ int main()
 	glEnable(GL_MULTISAMPLE);
 
 	// RENDER LOOP
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(&window))
 	{
 		// INPUT
 		//keysboard input, mouse input
-		processInput(window);
+		processInput(&window);
 
 		defaultShader.use();
 		// CAMERA
@@ -245,7 +245,7 @@ int main()
 		light.drawMesh(lightShader);
 		//GLFW updating the window
 		//std::cout << glGetError() << std::endl;
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(&window);
 		glfwPollEvents();
 	}
 	glfwTerminate();
