@@ -6,10 +6,6 @@
 
 class InputManager {
 public:
-
-
-    InputManager();
-
 };
 
 

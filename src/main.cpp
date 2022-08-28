@@ -34,8 +34,6 @@
 
 Camera maincam = Camera();
 
-//light
-float lighty = 1.0f;
 //matrices
 glm::mat4 model;
 //glm::mat4 view;
@@ -89,9 +87,6 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 	front.y = sin(glm::radians(maincam.pitch));
 	front.z = sin(glm::radians(maincam.yaw)) * cos(glm::radians(maincam.pitch));
 	maincam.camerafront = glm::normalize(front);
-
-	Game * gameinfo = GetGame(window);
-	std::cout << gameinfo->test << "\n";
 }
 
 //react to input
