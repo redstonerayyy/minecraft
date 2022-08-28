@@ -7,7 +7,11 @@
 class Game {
 public:
     int test;
+    
+
     Game(GLFWwindow * window);
 };
+
+Game * GetGame(GLFWwindow * window);
 
 #endif

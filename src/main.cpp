@@ -89,6 +89,9 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 	front.y = sin(glm::radians(maincam.pitch));
 	front.z = sin(glm::radians(maincam.yaw)) * cos(glm::radians(maincam.pitch));
 	maincam.camerafront = glm::normalize(front);
+
+	Game * gameinfo = GetGame(window);
+	std::cout << gameinfo->test << "\n";
 }
 
 //react to input
@@ -134,8 +137,7 @@ int main()
 	GLFWwindow& window = WindowInit();
 	
 	Game game = Game(&window);
-	Game * gameobject = reinterpret_cast<Game *>(glfwGetWindowUserPointer(&window));
-	std::cout << gameobject->test << "\n";
+	//Game * gameobject = reinterpret_cast<Game *>(glfwGetWindowUserPointer(&window));
 
 	glfwSetInputMode(&window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(&window, mouse_callback);
