@@ -33,7 +33,6 @@
 
 Camera maincam = Camera();
 
-
 //light
 float lighty = 1.0f;
 //matrices
@@ -133,10 +132,13 @@ int main()
 {
 	GLFWwindow& window = WindowInit();
 	
+	glfwSetInputMode(&window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(&window, mouse_callback);
+
 	// SHADERS
 	//TODO implement relative resource searching
 	//std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
-	std::string shaderDir = "/home/marcel/Projekte/redstonerayy/src/shaders/";
+	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
 	std::string vertexpath = shaderDir + "vertex.glsl";
 	std::string fragmentpath = shaderDir + "light_new.glsl";
 	std::vector<Shader> shaders;

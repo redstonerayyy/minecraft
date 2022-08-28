@@ -38,8 +38,6 @@ GLFWwindow& WindowInit(){
 
 	//set callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//glfwSetCursorPosCallback(window, mouse_callback); // <- Not working for now
 
 	// OPENGL
 	//set opengl viewport
