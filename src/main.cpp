@@ -23,6 +23,7 @@
 #include "primitives.h"
 
 #include "worldgen.h"
+#include "game.hpp"
 
 #include "utils.h"
 
@@ -132,6 +133,10 @@ int main()
 {
 	GLFWwindow& window = WindowInit();
 	
+	Game game = Game(&window);
+	Game * gameobject = reinterpret_cast<Game *>(glfwGetWindowUserPointer(&window));
+	std::cout << gameobject->test << "\n";
+
 	glfwSetInputMode(&window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(&window, mouse_callback);
 
