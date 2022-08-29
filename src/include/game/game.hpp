@@ -7,14 +7,14 @@
 //GAME CLASSES
 #include "camera.hpp"
 #include "time.hpp"
-#include "inputmanager.hpp"
+#include "input.hpp"
 
 class Game {
 public:
     int test;
     Camera maincam;
     Time time;
-    InputManager inputmanager;
+    Input input;
 
     Game(GLFWwindow * window);
 };

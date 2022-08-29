@@ -1,6 +1,6 @@
 #include "time.hpp"
 
-double Time::Update(){
+void Time::Update(){
     this->currentTime = glfwGetTime();
     this->deltaTime = this->currentTime - this->lastTime;
     this->lastTime = this->currentTime;

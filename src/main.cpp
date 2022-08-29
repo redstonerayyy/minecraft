@@ -14,7 +14,8 @@
 #include "textures.h"
 #include "camera.hpp"
 #include "windowinit.hpp"
-
+#include "processinput.hpp"
+#include "mousecallback.hpp"
 
 #include "structs.h"
 #include "fileslist.h"
@@ -32,92 +33,17 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-Camera maincam = Camera();
-
 //matrices
 glm::mat4 model;
-
-//input
-bool firstMouse = true; //set to false if mouse enters the window
-float lastX = 800.0f / 2.0f;
-float lastY = 600.0f / 2.0f;
-
-//make turning with mouse
-//not really an idea what happens, just copied from learnopengl
-void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
-{
-	auto xpos = static_cast<float>(xposIn);
-	auto ypos = static_cast<float>(yposIn);
-
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
-
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-	lastX = xpos;
-	lastY = ypos;
-
-	float sensitivity = 0.1f; // change this value to your liking
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-
-	maincam.yaw += xoffset;
-	maincam.pitch += yoffset;
-
-	// make sure that when pitch is out of bounds, screen doesn't get flipped
-	if (maincam.pitch > 89.0f)
-		maincam.pitch = 89.0f;
-	if (maincam.pitch < -89.0f)
-		maincam.pitch = -89.0f;
-
-	glm::vec3 front;
-	front.x = cos(glm::radians(maincam.yaw)) * cos(glm::radians(maincam.pitch));
-	front.y = sin(glm::radians(maincam.pitch));
-	front.z = sin(glm::radians(maincam.yaw)) * cos(glm::radians(maincam.pitch));
-	maincam.camerafront = glm::normalize(front);
-}
-
-//react to input
-void processInput(GLFWwindow* window)
-{
-	Game * gameinfo = GetGame(window);
-	std::cout << gameinfo->time.fps << "\n";
-
-	//close
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	//move camera
-	const float cameraSpeed = 10.0f * gameinfo->time.deltaTime; // adjust accordingly
-	//forward, backward, left, right
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		maincam.camerapos += cameraSpeed * maincam.camerafront;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		maincam.camerapos -= cameraSpeed * maincam.camerafront;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		maincam.camerapos -= glm::normalize(glm::cross(maincam.camerafront, maincam.cameraup)) * cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		maincam.camerapos += glm::normalize(glm::cross(maincam.camerafront, maincam.cameraup)) * cameraSpeed;
-	//up, down
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-		maincam.camerapos += maincam.cameraup * cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-		maincam.camerapos -= maincam.cameraup * cameraSpeed;
-}
-
 
 int main()
 {
 	GLFWwindow& window = WindowInit();
-	
-	Game game = Game(&window);
-	game.time = Time();
-
-	//Game * gameobject = reinterpret_cast<Game *>(glfwGetWindowUserPointer(&window));
+	Game gameinfo = Game(&window);
+	Game * game = GetGame(&window);
+	game->time = Time();
+	game->maincam = Camera();
+	game->input = Input();
 
 	glfwSetInputMode(&window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(&window, mouse_callback);
@@ -193,7 +119,7 @@ int main()
 	// RENDER LOOP
 	while (!glfwWindowShouldClose(&window))
 	{
-		game.time.Update();
+		game->time.Update();
 
 		// INPUT
 		//keysboard input, mouse input
@@ -203,11 +129,11 @@ int main()
 		// CAMERA
 		// model matrix set further down, dynamically for each object
 		//view matrix, transform world space to camera space
-		glm::mat4 view = glm::lookAt(maincam.camerapos, maincam.camerapos + maincam.camerafront, maincam.cameraup);
+		glm::mat4 view = glm::lookAt(game->maincam.camerapos, game->maincam.camerapos + game->maincam.camerafront, game->maincam.cameraup);
 		defaultShader.setMatrix4fv("view", view);
 
 		//projection matrix, view space to device cordinates
-		glm::mat4 projection = glm::perspective(glm::radians(maincam.fov), 800.0f / 600.0f, 0.1f, 400.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(game->maincam.fov), 800.0f / 600.0f, 0.1f, 400.0f);
 		defaultShader.setMatrix4fv("projection", projection);
 
 		// DRAWING
@@ -219,7 +145,7 @@ int main()
 		
 		defaultShader.setInt("tex_sampler1", 0);
 		defaultShader.setVec3("lightPos", -5.0f, -5.0f, -5.0f);
-		defaultShader.setVec3("viewPos", maincam.camerapos.x, maincam.camerapos.y, maincam.camerapos.z);
+		defaultShader.setVec3("viewPos", game->maincam.camerapos.x, game->maincam.camerapos.y, game->maincam.camerapos.z);
 
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
