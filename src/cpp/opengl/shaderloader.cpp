@@ -1,22 +1,23 @@
 #include "shaderloader.hpp"
 
 ShaderLoader::ShaderLoader(std::vector<std::string> directories, std::vector<std::string> paths){
-	
-	
-	
-	
-	//std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
-	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
-	std::string vertexpath = shaderDir + "vertex.glsl";
-	std::string fragmentpath = shaderDir + "light_new.glsl";
-	std::vector<Shader> shaders;
-	shaders.emplace_back(Shader(GL_VERTEX_SHADER, vertexpath.c_str()));
-	shaders.emplace_back(Shader(GL_FRAGMENT_SHADER, fragmentpath.c_str()));
-
-	std::string lightvertexpath = shaderDir + "light_vertex.glsl";
-	std::string lightfragmentpath = shaderDir + "light.glsl";
-	std::vector<Shader> lightshaders;
-	lightshaders.emplace_back(Shader(GL_VERTEX_SHADER, lightvertexpath.c_str()));
-	lightshaders.emplace_back(Shader(GL_FRAGMENT_SHADER, lightfragmentpath.c_str()));
-	ShaderProgram lightShader(lightshaders);
+	// get all filepaths for each directory
+    // check if the file ends on .glsl
+    // for glsl files starting with "ver" compile to VERTEX_SHADER
+    // else compile to FRAGMENT_SHADER
+    for(int i = 0; i < directories.size(); ++i){
+		std::vector<std::string> filepaths = Utils::getFilePathsInDirectory(directories[i]);
+		for(int j = 0; j < filepaths.size(); ++j){
+			if(Utils::getFileExtensionFromPath(filepaths[j]) == ".glsl"){
+                std::string filename = Utils::getFileNameFromPath(filepaths[j]);
+                if(filename.substr(0,3) == "ver"){
+                    std::cout << "ver" << "\n";
+                    this->shaders.emplace_back(Shader(GL_VERTEX_SHADER, filepaths[j].c_str(), filename));
+                } else {
+                    this->shaders.emplace_back(Shader(GL_FRAGMENT_SHADER, filepaths[j].c_str(), filename));
+                    std::cout << "fra" << "\n";
+                }
+			}
+		}
+	}
 }

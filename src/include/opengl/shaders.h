@@ -14,7 +14,8 @@
 class Shader {
 public:
     unsigned int shaderID;
-    Shader(int shaderType, const char * shaderpath);
+    std::string filename;
+    Shader(int shaderType, const char * shaderpath, std::string filename);
 };
 
 class ShaderProgram {

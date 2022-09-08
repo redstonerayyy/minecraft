@@ -17,6 +17,8 @@
 #include "processinput.hpp"
 #include "mousecallback.hpp"
 
+#include "shaderloader.hpp"
+
 #include "structs.h"
 #include "fileslist.h"
 
@@ -50,8 +52,23 @@ int main()
 
 	// SHADERS
 	//TODO implement relative resource searching
-	ShaderProgram defaultShader(shaders);
+	//std::string shaderDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\shaders\\";
+	std::string shaderDir = "/home/anton/Github/minecraft/src/shaders/";
+	std::string vertexpath = shaderDir + "vertex.glsl";
+	std::string fragmentpath = shaderDir + "light_new.glsl";
+	std::vector<Shader> shaders;
+	shaders.emplace_back(Shader(GL_VERTEX_SHADER, vertexpath.c_str(), ""));
+	shaders.emplace_back(Shader(GL_FRAGMENT_SHADER, fragmentpath.c_str(), ""));
+    ShaderProgram defaultShader(shaders);
+
+	std::string lightvertexpath = shaderDir + "light_vertex.glsl";
+	std::string lightfragmentpath = shaderDir + "light.glsl";
+	std::vector<Shader> lightshaders;
+	lightshaders.emplace_back(Shader(GL_VERTEX_SHADER, lightvertexpath.c_str(), ""));
+	lightshaders.emplace_back(Shader(GL_FRAGMENT_SHADER, lightfragmentpath.c_str(), ""));
+	ShaderProgram lightShader(lightshaders);
 	
+    ShaderLoader* shaderloader = new ShaderLoader({"run/shaders"});
 	
 	// TEXTURES
 
@@ -66,12 +83,11 @@ int main()
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	//smoothWorld(vertices, mesh_indices);
 	int size = 200.0f;
 	std::vector<float> noisemap = generateNoiseMap(size, size, 111);
 	for(int i = 0; i < size; i++){
 		for(int j = 0; j < size; j++){
-			float transvec[3] = {i*1.0f, froundf(0.0f * noisemap[i * size + j]), j*1.0f};
+			float transvec[3] = {i*1.0f, Utils::froundf(0.0f * noisemap[i * size + j]), j*1.0f};
 			int cubesides[6] = { 1, 1, 1, 1, 1, 1};
 			generateCube(vertices, indices, transvec, cubesides);
 		}
