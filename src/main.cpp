@@ -73,7 +73,7 @@ int main()
 	std::vector<float> noisemap = generateNoiseMap(size, size, 111);
 	for(int i = 0; i < size; i++){
 		for(int j = 0; j < size; j++){
-			float transvec[3] = {i*1.0f, Utils::froundf(0.0f * noisemap[i * size + j]), j*1.0f};
+			float transvec[3] = {i*1.0f, Utils::froundf(100.0f * noisemap[i * size + j]), j*1.0f};
 			int cubesides[6] = { 1, 1, 1, 1, 1, 1};
 			generateCube(vertices, indices, transvec, cubesides);
 		}
@@ -82,7 +82,8 @@ int main()
 	Mesh world;
 	world.addVBO(vertices);
 	world.addEBO(indices);
-	world.generateBuffers(true, true, true);
+	world.generateBuffers();
+    
 
 	std::vector<Vertex> lightvertices;
 	std::vector<unsigned int> lightindices;
@@ -92,7 +93,7 @@ int main()
 	Mesh light;
 	light.addVBO(lightvertices);
 	light.addEBO(lightindices);
-	light.generateBuffers(true, true, true);
+	light.generateBuffers();
 
 
 	// RENDER OPTIONS
@@ -105,10 +106,22 @@ int main()
 	//MSAA
 	glEnable(GL_MULTISAMPLE);
 
+	double shift = 0;
 	// RENDER LOOP
 	while (!glfwWindowShouldClose(&window))
 	{
+		shift += game->time.deltaTime;
 		game->time.Update();
+		if(shift > 1.0f){
+			std::vector<VBO> vbos = world.getVbos();
+			std::cout << vbos[0].vertices[0].Position.x << "\n";
+			for(int i = 0; i < vbos[0].vertices.size(); ++i){
+				vbos[0].vertices[i].Position.x -= 10;
+			}
+			std::cout << vbos[0].vertices[0].Position.x << "\n";
+			world.vao->fill(true, true, true);
+			shift = 0.0f;
+		}
 
 		// INPUT
 		//keysboard input, mouse input

@@ -14,8 +14,11 @@ public:
 	void addVBO(std::vector<Vertex> vertices);
 	void addEBO(std::vector<unsigned int> indices);
 
-	void generateBuffers(bool pos, bool tex, bool normal);
+	void generateBuffers(bool pos = true, bool tex = true, bool normal = true);
 	void drawMesh(ShaderProgram &shaderprogram);
+
+    std::vector<VBO> getVbos();
+	std::vector<EBO> getEbos();
 };
 
 #endif

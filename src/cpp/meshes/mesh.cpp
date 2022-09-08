@@ -18,3 +18,11 @@ void Mesh::drawMesh(ShaderProgram &shaderprogram) {
 	glDrawElements(GL_TRIANGLES, this->vao->eboslength, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
+
+std::vector<VBO> Mesh::getVbos(){
+    return this->vao->vbos;
+}
+
+std::vector<EBO> Mesh::getEbos(){
+    return this->vao->ebos;
+}

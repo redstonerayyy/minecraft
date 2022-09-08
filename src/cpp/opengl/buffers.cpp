@@ -22,7 +22,7 @@ void VAO::fill(bool pos, bool tex, bool normal) {
 		this->vboslength = all_vertices.size();
 		glGenBuffers(1, &this->vboallid);
 		glBindBuffer(GL_ARRAY_BUFFER, this->vboallid);
-		glBufferData(GL_ARRAY_BUFFER, all_vertices.size() * sizeof(all_vertices[0]), &all_vertices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, all_vertices.size() * sizeof(all_vertices[0]), &all_vertices[0], GL_DYNAMIC_DRAW);
 	}
 	if(0 < this->ebos.size() && this->ebos.size() < 2){
 		this->eboslength = ebos[0].indices.size();
@@ -35,7 +35,7 @@ void VAO::fill(bool pos, bool tex, bool normal) {
 		this->eboslength = all_indices.size();
 		glGenBuffers(1, &this->eboallid);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboallid);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, all_indices.size() * sizeof(all_indices[0]), &all_indices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, all_indices.size() * sizeof(all_indices[0]), &all_indices[0], GL_DYNAMIC_DRAW);
 	}
 
 	//position, texture, normal
@@ -65,7 +65,7 @@ VBO::VBO(std::vector<Vertex> vertices) {
 
 void VBO::fillBuffer() {
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
-	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(this->vertices[0]), &this->vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(this->vertices[0]), &this->vertices[0], GL_DYNAMIC_DRAW);
 }
 
 //EBO
@@ -76,5 +76,5 @@ EBO::EBO(std::vector<unsigned int> indices) {
 
 void EBO::fillBuffer() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(this->indices[0]), &this->indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(this->indices[0]), &this->indices[0], GL_DYNAMIC_DRAW);
 }

@@ -13,7 +13,6 @@ public:
     double fpscounter = 0.0f;
 
     void Update();
-
 };
 
 #endif
