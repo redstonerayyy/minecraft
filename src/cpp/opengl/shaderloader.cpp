@@ -11,13 +11,25 @@ ShaderLoader::ShaderLoader(std::vector<std::string> directories, std::vector<std
 			if(Utils::getFileExtensionFromPath(filepaths[j]) == ".glsl"){
                 std::string filename = Utils::getFileNameFromPath(filepaths[j]);
                 if(filename.substr(0,3) == "ver"){
-                    std::cout << "ver" << "\n";
                     this->shaders.emplace_back(Shader(GL_VERTEX_SHADER, filepaths[j].c_str(), filename));
                 } else {
                     this->shaders.emplace_back(Shader(GL_FRAGMENT_SHADER, filepaths[j].c_str(), filename));
-                    std::cout << "fra" << "\n";
                 }
 			}
 		}
 	}
+}
+
+ShaderProgram ShaderLoader::MakeProgram(std::vector<std::string> shadernames){
+    std::vector<Shader> shaderstolink;
+    for(int i = 0; i < shadernames.size(); ++i){
+        for(int j = 0; j < this->shaders.size(); ++j){
+            if(shadernames[i] == this->shaders[j].filename){
+                shaderstolink.push_back(this->shaders[j]);
+            }
+        }
+    }
+
+    ShaderProgram newprogram(shaderstolink);
+    return newprogram;
 }

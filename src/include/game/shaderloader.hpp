@@ -11,5 +11,5 @@ public:
 	std::vector<ShaderProgram> shaderprograms;
 
 	ShaderLoader(std::vector<std::string> directories = {}, std::vector<std::string> paths = {});
-	// ReadSource();
+	ShaderProgram MakeProgram(std::vector<std::string> shadernames);
 };

@@ -8,8 +8,6 @@
 
 //advanced calculation stuff
 #include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
 
 class Shader {
 public:
@@ -21,6 +19,7 @@ public:
 class ShaderProgram {
 public:
     unsigned int programID;
+    std::vector<std::string> shaderfilenames;
     ShaderProgram(std::vector<Shader> shaders);
     
     void use();

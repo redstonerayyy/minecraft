@@ -35,7 +35,8 @@ ShaderProgram::ShaderProgram(std::vector<Shader> shaders)
 	for (int i = 0; i < shaders.size(); i++)
 	{ // one int is 4 bytes long
 		glAttachShader(this->programID, shaders[i].shaderID);
-	}
+        this->shaderfilenames.push_back(shaders[i].filename);
+    }
 	glLinkProgram(this->programID);
 
 	int succes_program;
