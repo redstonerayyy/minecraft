@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include <array>
+#include <time.h>
 
 //self-defined management classes for opengl, game classes
 #include "shaders.h"
@@ -65,12 +66,17 @@ int main()
 	glActiveTexture(GL_TEXTURE0 + 1);
 	Texture texture2 = Texture(texturedir + "white.png");
 
+	//SEED
+	std::srand(time(NULL));
+	int seed = std::rand();
+
+	std::cout << seed << "\n";
 	// VERTEX DATA
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
 	int size = 200.0f;
-	std::vector<float> noisemap = generateNoiseMap(size, size, 111);
+	std::vector<float> noisemap = generateNoiseMap(size, size, seed);
 	for(int i = 0; i < size; i++){
 		for(int j = 0; j < size; j++){
 			float transvec[3] = {i*1.0f, Utils::froundf(100.0f * noisemap[i * size + j]), j*1.0f};
@@ -112,16 +118,16 @@ int main()
 	{
 		shift += game->time.deltaTime;
 		game->time.Update();
-		if(shift > 1.0f){
-			std::vector<VBO> vbos = world.getVbos();
-			std::cout << vbos[0].vertices[0].Position.x << "\n";
-			for(int i = 0; i < vbos[0].vertices.size(); ++i){
-				vbos[0].vertices[i].Position.x -= 10;
-			}
-			std::cout << vbos[0].vertices[0].Position.x << "\n";
-			world.vao->fill(true, true, true);
-			shift = 0.0f;
-		}
+		// if(shift > 1.0f){
+		// 	std::vector<VBO> vbos = world.getVbos();
+		// 	std::cout << vbos[0].vertices[0].Position.x << "\n";
+		// 	for(int i = 0; i < vbos[0].vertices.size(); ++i){
+		// 		vbos[0].vertices[i].Position.x -= 10;
+		// 	}
+		// 	std::cout << vbos[0].vertices[0].Position.x << "\n";
+		// 	world.vao->fill(true, true, true);
+		// 	shift = 0.0f;
+		// }
 
 		// INPUT
 		//keysboard input, mouse input
