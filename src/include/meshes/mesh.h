@@ -8,17 +8,25 @@
 
 class Mesh {
 public:
-	// mesh data
-	VAO* vao = new VAO();
-	
-	void addVBO(std::vector<Vertex> vertices);
-	void addEBO(std::vector<unsigned int> indices);
+    //MESH DATA, vertices and indices
+    std::vector<std::vector<Vertex>> verticesarrays;
+    std::vector<std::vector<unsigned int> indicesarrays;
+    
+    void addVerticeArray(std::vector<Vertex> vertices);
+    void addIndiceArray(std::vector<unsigned int> indices);
 
-	void generateBuffers(bool pos = true, bool tex = true, bool normal = true);
-	void drawMesh(ShaderProgram &shaderprogram);
+    std::vector<Vertex> ConcatVerticeArrays(std::vector<int> indices);
+    std::vector<unsigned int> ConcatIndiceArrays(std::vector<int> indices);
+    
+    //VAOS
+    std::vector<VAO> vaos;
+    
+    void addVAO(std::vector<int> varrays, std::vector<int> iarrays, std::string name);
+    void deleteVAO(std::string name);
+    void bindVAO(std::string name);
+    void drawVAO(ShaderProgram &shaderprogram);
 
-    std::vector<VBO> getVbos();
-	std::vector<EBO> getEbos();
+    Mesh();
 };
 
 #endif
