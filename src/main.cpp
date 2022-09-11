@@ -76,7 +76,7 @@ int main()
 	std::vector<unsigned int> indices;
 
 	int size = 200.0f;
-	std::vector<float> noisemap = generateNoiseMap(size, size, seed);
+	std::vector<float> noisemap = generateNoiseMap(size, size, 4, seed);
 	for(int i = 0; i < size; i++){
 		for(int j = 0; j < size; j++){
 			float transvec[3] = {i*1.0f, Utils::froundf(100.0f * noisemap[i * size + j]), j*1.0f};

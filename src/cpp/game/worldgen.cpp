@@ -1,6 +1,6 @@
 #include "worldgen.h"
 
-std::vector<float> generateNoiseMap(int width, int depth, long unsigned int heightmapseed) {
+std::vector<float> generateNoiseMap(int width, int depth, int octaves, long unsigned int heightmapseed) {
 	const siv::PerlinNoise::seed_type seed = heightmapseed;
 	const siv::PerlinNoise perlin{ seed };
 
@@ -8,7 +8,7 @@ std::vector<float> generateNoiseMap(int width, int depth, long unsigned int heig
 	//scale and octaves as parameters
 	for (int x = 0; x < width; x++) {
 		for (int z = 0; z < depth; z++) {
-			const float noise = perlin.octave2D_01((x * 0.01), (z * 0.01), 4);
+			const float noise = perlin.octave2D_01((x * 0.01), (z * 0.01), octaves);
 			noisemap.push_back(noise);
 		}
 	}
