@@ -41,6 +41,7 @@ glm::mat4 model;
 
 int main()
 {
+    //INITIALIZE WINDOW AND GLOBALS
 	GLFWwindow& window = WindowInit();
 	Game gameinfo = Game(&window);
 	Game * game = GetGame(&window);
@@ -59,7 +60,6 @@ int main()
 	
 	// TEXTURES
 
-	//std::string textureDir = "C:\\Users\\paul\\source\\repos\\minecraft\\src\\textures\\";
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	Texture texture1 = Texture(texturedir + "diamond_ore.png");
@@ -71,6 +71,7 @@ int main()
 	int seed = std::rand();
 
 	std::cout << seed << "\n";
+
 	// VERTEX DATA
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -85,22 +86,11 @@ int main()
 		}
 	}
 
+    //MESH
 	Mesh world;
 	world.addVBO(vertices);
 	world.addEBO(indices);
 	world.generateBuffers();
-    
-
-	std::vector<Vertex> lightvertices;
-	std::vector<unsigned int> lightindices;
-	float lightpos[3] = {5.0f, 5.0f, 5.0f};
-	int cubesides[6] = { 1, 1, 1, 1, 1, 1};
-	generateCube(lightvertices, lightindices, lightpos, cubesides);
-	Mesh light;
-	light.addVBO(lightvertices);
-	light.addEBO(lightindices);
-	light.generateBuffers();
-
 
 	// RENDER OPTIONS
 	// Wireframes
@@ -112,22 +102,10 @@ int main()
 	//MSAA
 	glEnable(GL_MULTISAMPLE);
 
-	double shift = 0;
 	// RENDER LOOP
 	while (!glfwWindowShouldClose(&window))
 	{
-		shift += game->time.deltaTime;
 		game->time.Update();
-		// if(shift > 1.0f){
-		// 	std::vector<VBO> vbos = world.getVbos();
-		// 	std::cout << vbos[0].vertices[0].Position.x << "\n";
-		// 	for(int i = 0; i < vbos[0].vertices.size(); ++i){
-		// 		vbos[0].vertices[i].Position.x -= 10;
-		// 	}
-		// 	std::cout << vbos[0].vertices[0].Position.x << "\n";
-		// 	world.vao->fill(true, true, true);
-		// 	shift = 0.0f;
-		// }
 
 		// INPUT
 		//keysboard input, mouse input
@@ -158,16 +136,9 @@ int main()
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
 		defaultShader.setMatrix4fv("model", model);
-		// glEnable(GL_TEXTURE_2D);
-		// glActiveTexture(GL_TEXTURE0);
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		world.drawMesh(defaultShader);
+		
+        world.drawMesh(defaultShader);
 
-		lightShader.use();
-		lightShader.setMatrix4fv("view", view);
-		lightShader.setMatrix4fv("projection", projection);
-		lightShader.setMatrix4fv("model", model);
-		light.drawMesh(lightShader);
 		//GLFW updating the window
 		//std::cout << glGetError() << std::endl;
 		glfwSwapBuffers(&window);
