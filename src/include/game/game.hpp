@@ -8,6 +8,7 @@
 #include "camera.hpp"
 #include "time.hpp"
 #include "input.hpp"
+#include "space.hpp"
 
 class Game {
 public:
@@ -15,6 +16,7 @@ public:
     Camera maincam;
     Time time;
     Input input;
+    Space space;
 
     Game(GLFWwindow * window);
 };

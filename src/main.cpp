@@ -33,6 +33,7 @@
 
 #include "worldgen.h"
 #include "game.hpp"
+#include "space.hpp"
 
 #include "utils.h"
 
@@ -54,6 +55,7 @@ int main()
 	game->time = Time();
 	game->maincam = Camera();
 	game->input = Input();
+    game->space = Space();
 
 	// SHADERS
     ShaderLoader shaderloader({"run/shaders"});
@@ -105,38 +107,27 @@ int main()
 	// RENDER LOOP
 	while (!glfwWindowShouldClose(&window))
 	{
+        //TIME, MATRIZES
 		game->time.Update();
-
-		// INPUT
+        game->space.Update(game->maincam, defaultShader);
+		
+        // INPUT
 		//keysboard input, mouse input
 		processInput(&window);
 
 		defaultShader.use();
-		// CAMERA
-		// model matrix set further down, dynamically for each object
-		//view matrix, transform world space to camera space
-		glm::mat4 view = glm::lookAt(game->maincam.camerapos, game->maincam.camerapos + game->maincam.camerafront, game->maincam.cameraup);
-		defaultShader.setMatrix4fv("view", view);
-
-		//projection matrix, view space to device cordinates
-		glm::mat4 projection = glm::perspective(glm::radians(game->maincam.fov), 800.0f / 600.0f, 0.1f, 400.0f);
-		defaultShader.setMatrix4fv("projection", projection);
 
 		// DRAWING
 		//clear color and depth buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		////vertex data, shaders
 		
+        //SHADER
 		defaultShader.setInt("tex_sampler1", 0);
 		defaultShader.setVec3("lightPos", -5.0f, -5.0f, -5.0f);
 		defaultShader.setVec3("viewPos", game->maincam.camerapos.x, game->maincam.camerapos.y, game->maincam.camerapos.z);
 
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
-		defaultShader.setMatrix4fv("model", model);
-		
+        //MESHES
         world.draw(defaultShader);
 
 		//GLFW updating the window

@@ -1,5 +1,7 @@
 #include "shaderloader.hpp"
 
+#include <glad/gl.h>
+
 ShaderLoader::ShaderLoader(std::vector<std::string> directories, std::vector<std::string> paths){
 	// get all filepaths for each directory
     // check if the file ends on .glsl
