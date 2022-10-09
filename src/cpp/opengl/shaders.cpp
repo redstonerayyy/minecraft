@@ -2,6 +2,8 @@
 // util header
 #include "utils.h"
 
+#include <glad/gl.h>
+
 // advanced calculation stuff
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
