@@ -32,7 +32,7 @@ add_executable(opengl src/main.cpp ${SOURCE_FILES} glfw/deps/glad_gl.c)
 
 #libraries
 target_include_directories(opengl PRIVATE ${OPENGL_INCLUDE_DIRS})
-target_include_directories(opengl PRIVATE glm)
+target_include_directories(opengl PRIVATE glm/glm)
 target_include_directories(opengl PRIVATE glfw/include)
 target_include_directories(opengl PRIVATE glfw/deps)
 target_include_directories(opengl PRIVATE lib/include)
