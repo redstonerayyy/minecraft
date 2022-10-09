@@ -9,6 +9,11 @@
 #include <array>
 #include <time.h>
 
+//advanced calculation stuff
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
+
 //self-defined management classes for opengl, game classes
 #include "shaders.h"
 #include "buffers.h"
@@ -31,10 +36,6 @@
 
 #include "utils.h"
 
-//advanced calculation stuff
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
 
 //matrices
 glm::mat4 model;
@@ -42,15 +43,17 @@ glm::mat4 model;
 int main()
 {
     //INITIALIZE WINDOW AND GLOBALS
-	GLFWwindow& window = WindowInit();
+	//WINDOW
+    GLFWwindow& window = WindowInit();
+	glfwSetInputMode(&window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(&window, mouse_callback);
+
+    //GLOBALS
 	Game gameinfo = Game(&window);
 	Game * game = GetGame(&window);
 	game->time = Time();
 	game->maincam = Camera();
 	game->input = Input();
-
-	glfwSetInputMode(&window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPosCallback(&window, mouse_callback);
 
 	// SHADERS
     ShaderLoader shaderloader({"run/shaders"});
@@ -59,7 +62,6 @@ int main()
     ShaderProgram lightShader = shaderloader.MakeProgram({"vertex_light.glsl", "light.glsl"});
 	
 	// TEXTURES
-
 	glEnable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	Texture texture1 = Texture(texturedir + "diamond_ore.png");
@@ -87,10 +89,8 @@ int main()
 	}
 
     //MESH
-	Mesh world;
-	world.addVBO(vertices);
-	world.addEBO(indices);
-	world.generateBuffers();
+	Mesh world = Mesh(vertices, indices);
+	world.generateBuffers(true, true, true);
 
 	// RENDER OPTIONS
 	// Wireframes
@@ -137,7 +137,7 @@ int main()
 		model = glm::translate(model, glm::vec3(-1.0, -1.0, -1.0));
 		defaultShader.setMatrix4fv("model", model);
 		
-        world.drawMesh(defaultShader);
+        world.draw(defaultShader);
 
 		//GLFW updating the window
 		//std::cout << glGetError() << std::endl;
