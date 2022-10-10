@@ -111,6 +111,18 @@ int main()
 		game->time.Update();
         game->space.Update(game->maincam, defaultShader);
 		
+
+        //UPDATES VERTS
+        for(int i = 0; i < world.vertices.size(); ++i){
+            world.vertices[i].Position.x += -1;
+        }
+
+        // for(auot& vert : world.vertices){
+        //     vert.Position.x += 1;
+        // }
+
+        world.generateBuffers(true, true, true);
+
         // INPUT
 		//keysboard input, mouse input
 		processInput(&window);

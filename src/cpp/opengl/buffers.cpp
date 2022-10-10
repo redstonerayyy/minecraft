@@ -44,6 +44,10 @@ void VAO::fill(bool pos, bool tex, bool normal) {
 	if(normal) { this->setAttribPointer(2, 3, GL_FLOAT, false, 8, 5); };
 }
 
+void VAO::UpdateBuffer(){
+    
+}
+
 void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset) {
 	this->bind();
 	glVertexAttribPointer(
