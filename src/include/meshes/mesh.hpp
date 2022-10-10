@@ -15,6 +15,7 @@ public:
     VAO* vao = new VAO();
 
     void generateBuffers(bool pos = true, bool tex  = true, bool normal  = true);
+    void updateBuffers();
     void draw(ShaderProgram &shaderprogram);
 
     Mesh(std::vector<Vertex> verts, std::vector<unsigned int> inds);

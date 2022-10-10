@@ -7,28 +7,8 @@
 #include <vector>
 #include "structs.hpp"
 
-class VBO;
-class EBO;
-
-class VAO {
-public:
-	unsigned int vaoID;
-	unsigned int vboslength;
-	unsigned int eboslength;
-	std::vector<VBO> vbos;
-	std::vector<EBO> ebos;
-	
-	VAO();
-
-	void bind();
-	void fill(bool pos, bool tex, bool normal);
-	void setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset);
-
-private:
-	unsigned int vboallid;
-	unsigned int eboallid;
-};
-
+// class VBO;
+// class EBO;
 class VBO {
 public:
 	unsigned int vboID;
@@ -36,7 +16,9 @@ public:
 
 	VBO(std::vector<Vertex> vertices);
 
+    void bind();
 	void fillBuffer();
+    void updateBuffer();
 };
 
 class EBO {
@@ -46,7 +28,27 @@ public:
 
 	EBO(std::vector<unsigned int> indices);
 
+    void bind();
 	void fillBuffer();
+    void updateBuffer();
+};
+
+class VAO {
+public:
+	unsigned int vaoID;
+	VBO* vbo;
+	EBO* ebo;
+	
+	VAO();
+
+	void bind();
+	void fill(bool pos, bool tex, bool normal);
+    void update();
+	void setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset);
+
+private:
+	unsigned int vboallid;
+	unsigned int eboallid;
 };
 
 #endif

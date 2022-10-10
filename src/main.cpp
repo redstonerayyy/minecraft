@@ -113,19 +113,21 @@ int main()
 		
 
         //UPDATES VERTS
-        for(int i = 0; i < world.vertices.size(); ++i){
-            world.vertices[i].Position.x += -1;
-        }
-
-        // for(auot& vert : world.vertices){
-        //     vert.Position.x += 1;
+        //move world
+        // for(int i = 0; i < world.vertices.size(); ++i){
+        //     world.vertices[i].Position.x += -1;
         // }
 
-        world.generateBuffers(true, true, true);
+        // world.updateBuffers();
 
         // INPUT
 		//keysboard input, mouse input
-		processInput(&window);
+        std::cout << vertices[0].Position.x << vertices[0].Position.y << vertices[0].Position.z << std::endl;
+		processInput(&window, vertices, indices);
+        world.vertices = vertices;
+        world.indices = indices;
+        world.updateBuffers();
+        std::cout << vertices[0].Position.x << vertices[0].Position.y << vertices[0].Position.z << std::endl;
 
 		defaultShader.use();
 
