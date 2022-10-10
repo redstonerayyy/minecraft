@@ -15,9 +15,9 @@
 #include <gtc/type_ptr.hpp>
 
 //self-defined management classes for opengl, game classes
-#include "shaders.h"
-#include "buffers.h"
-#include "textures.h"
+#include "shaders.hpp"
+#include "buffers.hpp"
+#include "textures.hpp"
 #include "camera.hpp"
 #include "windowinit.hpp"
 #include "processinput.hpp"
@@ -25,17 +25,17 @@
 
 #include "shaderloader.hpp"
 
-#include "structs.h"
-#include "fileslist.h"
+#include "structs.hpp"
+#include "fileslist.hpp"
 
-#include "mesh.h"
-#include "primitives.h"
+#include "mesh.hpp"
+#include "primitives.hpp"
 
-#include "worldgen.h"
+#include "worldgen.hpp"
 #include "game.hpp"
 #include "space.hpp"
 
-#include "utils.h"
+#include "utils.hpp"
 
 
 //matrices

@@ -1,7 +1,7 @@
-#include "textures.h"
+#include "textures.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#include "fileslist.h"
+#include "fileslist.hpp"
 
 //TEXTURE CLASS
 Texture::Texture(std::string filepath){

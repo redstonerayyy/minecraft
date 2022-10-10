@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "structs.h"
+#include "structs.hpp"
 
 class VBO;
 class EBO;

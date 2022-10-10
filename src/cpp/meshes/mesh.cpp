@@ -1,4 +1,4 @@
-#include "mesh.h"
+#include "mesh.hpp"
 
 Mesh::Mesh(std::vector<Vertex> verts, std::vector<unsigned int> inds){
     this->vertices = verts;

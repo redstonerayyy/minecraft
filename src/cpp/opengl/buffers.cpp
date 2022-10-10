@@ -1,4 +1,4 @@
-#include "buffers.h"
+#include "buffers.hpp"
 
 //VAO
 VAO::VAO() {

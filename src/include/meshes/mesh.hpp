@@ -2,9 +2,9 @@
 #define MESH_H
 
 #include <vector>
-#include "structs.h"
-#include "buffers.h"
-#include "shaders.h"
+#include "structs.hpp"
+#include "buffers.hpp"
+#include "shaders.hpp"
 
 class Mesh {
 public:

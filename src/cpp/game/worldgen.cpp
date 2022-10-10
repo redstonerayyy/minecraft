@@ -1,4 +1,4 @@
-#include "worldgen.h"
+#include "worldgen.hpp"
 
 std::vector<float> generateNoiseMap(int width, int depth, int octaves, long unsigned int heightmapseed) {
 	const siv::PerlinNoise::seed_type seed = heightmapseed;

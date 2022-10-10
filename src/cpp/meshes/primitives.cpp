@@ -1,4 +1,4 @@
-#include "primitives.h"
+#include "primitives.hpp"
 
 Vertex createVertex(const float * position, float tex1, float tex2, float nvecx, float nvecy, float nvecz){
 	Vertex vert;
