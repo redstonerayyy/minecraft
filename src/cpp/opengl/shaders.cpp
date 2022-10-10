@@ -1,6 +1,6 @@
-#include "shaders.h"
+#include "shaders.hpp"
 // util header
-#include "utils.h"
+#include "utils.hpp"
 
 #include <glad/gl.h>
 

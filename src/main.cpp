@@ -15,9 +15,9 @@
 #include <gtc/type_ptr.hpp>
 
 //self-defined management classes for opengl, game classes
-#include "shaders.h"
-#include "buffers.h"
-#include "textures.h"
+#include "shaders.hpp"
+#include "buffers.hpp"
+#include "textures.hpp"
 #include "camera.hpp"
 #include "windowinit.hpp"
 #include "processinput.hpp"
@@ -25,17 +25,17 @@
 
 #include "shaderloader.hpp"
 
-#include "structs.h"
-#include "fileslist.h"
+#include "structs.hpp"
+#include "fileslist.hpp"
 
-#include "mesh.h"
-#include "primitives.h"
+#include "mesh.hpp"
+#include "primitives.hpp"
 
-#include "worldgen.h"
+#include "worldgen.hpp"
 #include "game.hpp"
 #include "space.hpp"
 
-#include "utils.h"
+#include "utils.hpp"
 
 
 //matrices
@@ -111,9 +111,23 @@ int main()
 		game->time.Update();
         game->space.Update(game->maincam, defaultShader);
 		
+
+        //UPDATES VERTS
+        //move world
+        // for(int i = 0; i < world.vertices.size(); ++i){
+        //     world.vertices[i].Position.x += -1;
+        // }
+
+        // world.updateBuffers();
+
         // INPUT
 		//keysboard input, mouse input
-		processInput(&window);
+        std::cout << vertices[0].Position.x << vertices[0].Position.y << vertices[0].Position.z << std::endl;
+		processInput(&window, vertices, indices);
+        world.vertices = vertices;
+        world.indices = indices;
+        world.updateBuffers();
+        std::cout << vertices[0].Position.x << vertices[0].Position.y << vertices[0].Position.z << std::endl;
 
 		defaultShader.use();
 

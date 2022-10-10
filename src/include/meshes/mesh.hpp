@@ -2,9 +2,9 @@
 #define MESH_H
 
 #include <vector>
-#include "structs.h"
-#include "buffers.h"
-#include "shaders.h"
+#include "structs.hpp"
+#include "buffers.hpp"
+#include "shaders.hpp"
 
 class Mesh {
 public:
@@ -15,6 +15,7 @@ public:
     VAO* vao = new VAO();
 
     void generateBuffers(bool pos = true, bool tex  = true, bool normal  = true);
+    void updateBuffers();
     void draw(ShaderProgram &shaderprogram);
 
     Mesh(std::vector<Vertex> verts, std::vector<unsigned int> inds);

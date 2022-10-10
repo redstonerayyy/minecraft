@@ -2,8 +2,8 @@
 
 #include <vector>
 #include <string>  
-#include "shaders.h"
-#include "utils.h"
+#include "shaders.hpp"
+#include "utils.hpp"
 
 class ShaderLoader {
 public:
