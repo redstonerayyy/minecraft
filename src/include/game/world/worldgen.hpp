@@ -1,6 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include "PerlinNoise.hpp"
+#include <iostream> // for loggin
+#include "PerlinNoise.hpp" // header only library for perlin noise needed for noisemaps
 
-std::vector<float> generateNoiseMap(int width, int depth, int octaves, long unsigned int heightmapseed);
+//configure noisemap generation
+std::vector<std::vector<float>> generateNoiseMap(int width, int depth, int octaves, long unsigned int heightmapseed);
