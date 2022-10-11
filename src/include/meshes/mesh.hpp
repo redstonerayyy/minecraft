@@ -1,5 +1,4 @@
-#ifndef MESH_H
-#define MESH_H
+#pragma once
 
 #include <vector>
 #include "structs.hpp"
@@ -20,5 +19,3 @@ public:
 
     Mesh(std::vector<Vertex> verts, std::vector<unsigned int> inds);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#pragma once
 
 #include <glm.hpp>
 #include <string>
@@ -15,5 +14,3 @@ struct TextureStruct {
 	std::string type;
 	std::string name;
 };
-
-#endif

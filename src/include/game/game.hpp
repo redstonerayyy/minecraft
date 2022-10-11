@@ -1,5 +1,4 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
 
 //GLFW
 #include <GLFW/glfw3.h>
@@ -22,5 +21,3 @@ public:
 };
 
 Game * GetGame(GLFWwindow * window);
-
-#endif

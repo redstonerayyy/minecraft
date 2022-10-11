@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include <glm.hpp>
 
@@ -21,5 +20,3 @@ public:
         float fov = 45.0f
     );
 };
-
-#endif
