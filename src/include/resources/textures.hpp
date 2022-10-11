@@ -1,5 +1,4 @@
-#ifndef TEXTURES_H
-#define TEXTURES_H
+#pragma once
 
 #include <glad/gl.h>
 #include <iostream>
@@ -18,5 +17,3 @@ public:
 	void setDefaultTextureProperties();
 	void setTextureData(unsigned char * data);
 };
-
-#endif

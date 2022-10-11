@@ -1,5 +1,4 @@
-#ifndef PROCESSINPUT_HPP
-#define PROCESSINPUT_HPP
+#pragma once
 
 #include "GLFW/glfw3.h"
 #include "game.hpp"
@@ -11,5 +10,3 @@
 #include <iostream>
 
 void processInput(GLFWwindow* window, std::vector<Vertex> &verts, std::vector<unsigned int> &inds);
-
-#endif

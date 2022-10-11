@@ -1,5 +1,4 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
 
 //GLFW
 #include <GLFW/glfw3.h>
@@ -10,9 +9,11 @@
 #include "input.hpp"
 #include "space.hpp"
 
+//global object referenced by glfws window pointer,
+//holds instances of import classes
+//lock into instance headers and source files for more informatoin
 class Game {
 public:
-    int test;
     Camera maincam;
     Time time;
     Input input;
@@ -21,6 +22,5 @@ public:
     Game(GLFWwindow * window);
 };
 
+//return reference to this object using the window pointer
 Game * GetGame(GLFWwindow * window);
-
-#endif

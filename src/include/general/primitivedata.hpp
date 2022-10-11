@@ -1,5 +1,4 @@
-#ifndef PRIMITIVEDATA_H
-#define PRIMITIVEDATA_H
+#pragma once
 
 //square which the x axis goes through
 //same for the others
@@ -45,5 +44,3 @@ const float normalsreverse[3][3] = {
 	{0.0f, -1.0f, 0.0f},
 	{0.0f, 0.0f, -1.0f},
 };
-
-#endif

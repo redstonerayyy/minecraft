@@ -24,9 +24,12 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/glfw)
 
 #build minecraft
 #source files
-FILE(GLOB SOURCE_FILES src/cpp/**/*.cpp)
+FILE(GLOB SOURCE_FILES_SUB0 src/cpp/*.cpp)
+FILE(GLOB SOURCE_FILES_SUB1 src/cpp/**/*.cpp)
+FILE(GLOB SOURCE_FILES_SUB2 src/cpp/**/**/*.cpp)
+
 #add target
-add_executable(opengl src/main.cpp ${SOURCE_FILES} glfw/deps/glad_gl.c)
+add_executable(opengl src/main.cpp ${SOURCE_FILES_SUB0} ${SOURCE_FILES_SUB1} ${SOURCE_FILES_SUB2} glfw/deps/glad_gl.c)
 
 #include dirs
 
@@ -39,10 +42,13 @@ target_include_directories(opengl PRIVATE lib/include)
 
 #source headers
 target_include_directories(opengl PRIVATE src/include/game)
+target_include_directories(opengl PRIVATE src/include/game/world)
 target_include_directories(opengl PRIVATE src/include/general)
 target_include_directories(opengl PRIVATE src/include/meshes)
-target_include_directories(opengl PRIVATE src/include/opengl)
+target_include_directories(opengl PRIVATE src/include/renderer)
+target_include_directories(opengl PRIVATE src/include/resources)
 target_include_directories(opengl PRIVATE src/include/util)
+target_include_directories(opengl PRIVATE src/include/window)
 
 #link libraries
 target_link_libraries(opengl ${OPENGL_LIBRARIES} glfw)

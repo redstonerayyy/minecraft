@@ -1,5 +1,4 @@
-#ifndef BUFFERS_H
-#define BUFFERS_H
+#pragma once
 
 #include <glad/gl.h>
 #include <string>
@@ -50,5 +49,3 @@ private:
 	unsigned int vboallid;
 	unsigned int eboallid;
 };
-
-#endif

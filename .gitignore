@@ -3,3 +3,4 @@
 /run
 /.vscode
 !/.gitignore
+CMakeSettings.json

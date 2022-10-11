@@ -1,5 +1,4 @@
-#ifndef INPUTMANAGER_HPP
-#define INPUTMANAGER_HPP
+#pragma once
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -13,5 +12,3 @@ public:
 
     Input();
 };
-
-#endif

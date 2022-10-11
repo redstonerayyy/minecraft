@@ -1,5 +1,4 @@
-#ifndef TIME_HPP
-#define TIME_HPP
+#pragma once
 
 #include <GLFW/glfw3.h>
 
@@ -14,5 +13,3 @@ public:
 
     void Update();
 };
-
-#endif

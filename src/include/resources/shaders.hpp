@@ -1,5 +1,4 @@
-#ifndef SHADERS_H
-#define SHADERS_H
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -31,5 +30,3 @@ public:
     void setVec4(const std::string& name, float x, float y, float z, float w);
     void setMatrix4fv(const std::string& name, glm::mat4 trans);
 };
-
-#endif

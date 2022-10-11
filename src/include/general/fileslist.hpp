@@ -1,5 +1,4 @@
-#ifndef FILESLIST_H
-#define FILESLIST_H
+#pragma once
 
 #include <string>
 
@@ -8,5 +7,3 @@ const std::string textures[] = {
 	"gold_ore.png",
 	"diamond_ore.png",
 };
-
-#endif
