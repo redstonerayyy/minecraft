@@ -12,6 +12,8 @@ namespace Utils {
     {
         size_t pos = 0;
         std::vector<std::string> tokens;
+        // check if the delimiter is present and then add a substring to
+        // the vector. finally erase the added part in the current string
         while ((pos = startString.find(delimiter)) != std::string::npos)
         {
             tokens.push_back(startString.substr(0, pos));
@@ -24,6 +26,8 @@ namespace Utils {
     // utility function
     std::string readStringFromFile(const char *filePath)
     {
+        // convert file buffer to string stream and this
+        // stream to a std::string
         std::ifstream file;
         file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         try
@@ -41,16 +45,8 @@ namespace Utils {
         };
     }
 
-    float froundf(float f)
-    {
-        return (float)floor(f + 0.5);
-    }
-
-    int froundi(float f)
-    {
-        return (int)floor(f + 0.5);
-    }
-
+    // loop through filesystem and get path entries
+    // no recursion in subdirectories
     std::vector<std::string> getFilePathsInDirectory(std::string directorypath){
         std::vector<std::string> filepaths;
         for (const auto & entry : std::filesystem::directory_iterator(directorypath))
@@ -64,6 +60,16 @@ namespace Utils {
 
     std::string getFileNameFromPath(std::string filepath){
         return std::filesystem::path(filepath).filename();
+    }
+
+    float froundf(float f)
+    {
+        return (float)floor(f + 0.5);
+    }
+
+    int froundi(float f)
+    {
+        return (int)floor(f + 0.5);
     }
 }
 

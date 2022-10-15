@@ -5,16 +5,16 @@
 
 //TEXTURE CLASS
 Texture::Texture(std::string filepath){
-	this->textureid = this->generateAndBindTexture2D();
-	unsigned char * imgdata = this->loadImgData(filepath, false);
-	this->setDefaultTextureProperties();
+	this->textureid = this->generateAndBindTexture2D(); // create opengl shaders
+	unsigned char * imgdata = this->loadImgData(filepath, false); // load img, second para is if it has alpha
+	this->setDefaultTextureProperties(); // set
 	this->setTextureData(imgdata);
 }
 
 void Texture::bind(){
 	glBindTexture(GL_TEXTURE_2D, this->textureid);
 }
-
+// generate texture with opengl calls
 unsigned int Texture::generateAndBindTexture2D(){
 	//generate texture
 	unsigned int texture;
@@ -23,7 +23,7 @@ unsigned int Texture::generateAndBindTexture2D(){
 	glBindTexture(GL_TEXTURE_2D, texture);
 	return texture;
 }
-
+// use stbi image to load img data from file
 unsigned char * Texture::loadImgData(std::string filepath, bool is_stbi_alpha){
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char *data;
@@ -39,7 +39,7 @@ unsigned char * Texture::loadImgData(std::string filepath, bool is_stbi_alpha){
 
 	return data;
 }
-
+// set wrap, border and filter options
 void Texture::setDefaultTextureProperties(){
 	// TEXTURE PROPERTIES
 	// wrap
@@ -54,7 +54,9 @@ void Texture::setDefaultTextureProperties(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
-
+// set image data loaded previously to texture
+// beware of RGB and BYTE type parameters
+// generate mipmaps
 void Texture::setTextureData(unsigned char * data){
 	if (nrChannels == 3) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

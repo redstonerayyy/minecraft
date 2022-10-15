@@ -3,8 +3,9 @@
 //react to input
 void processInput(GLFWwindow* window, std::vector<Vertex> &verts, std::vector<unsigned int> &inds)
 {
+    // get game
 	Game * game = GetGame(window);
-	// std::cout << game->time.fps << "\n";
+    std::cout << game->time.fps << "\n";
 
 	//close
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -33,8 +34,6 @@ void processInput(GLFWwindow* window, std::vector<Vertex> &verts, std::vector<un
         std::vector<unsigned int> itemp;
         std::srand(time(NULL));
 	    int seed = std::rand();
-        std::cout << "test" << seed << std::endl;
-        std::cout << verts[0].Position.x << std::endl;
         int size = 200.0f;
         std::vector<std::vector<float>> noisemap = generateNoiseMap(size, size, 4, seed);
         for(int i = 0; i < size; i++){

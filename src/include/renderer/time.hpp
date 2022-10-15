@@ -2,6 +2,8 @@
 
 #include <GLFW/glfw3.h>
 
+//object for holding time information
+// like delta time or fps
 class Time {
 public:
     double deltaTime = 0.0f;

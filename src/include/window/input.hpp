@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "glm.hpp"
 
+// hold mouse properties
 class Input {
 public:
     float mouseoutside;
