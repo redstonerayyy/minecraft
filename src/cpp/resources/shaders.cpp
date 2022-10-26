@@ -90,7 +90,7 @@ void ShaderProgram::setVec4(const std::string &name, float x, float y, float z, 
 {
 	float vec4[] = {
 			x, y, z, w};
-	glUniform3fv(glGetUniformLocation(this->programID, name.c_str()), 1, vec4);
+	glUniform4fv(glGetUniformLocation(this->programID, name.c_str()), 1, vec4);
 }
 
 void ShaderProgram::setMatrix4fv(const std::string &name, glm::mat4 trans)
