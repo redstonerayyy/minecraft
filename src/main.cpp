@@ -36,6 +36,7 @@
 #include "space.hpp"
 
 #include "utils.hpp"
+#include "world.hpp"
 
 
 //matrices
@@ -80,18 +81,21 @@ int main()
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
+	World worldgen = World( seed );
+	Chunk chunkone = worldgen.GetChunk(0, 0);
+
 	int size = 200.0f;
 	std::vector<std::vector<float>> noisemap = generateNoiseMap(size, size, 4, seed);
 	for(int i = 0; i < size; i++){
 		for(int j = 0; j < size; j++){
 			float transvec[3] = {i*1.0f, Utils::froundf(100.0f * noisemap[i][j]), j*1.0f};
-			int cubesides[6] = { 1, 1, 1, 1, 1, 1};
+			std::array<int, 6> cubesides = { 1, 1, 1, 1, 1, 1};
 			generateCube(vertices, indices, transvec, cubesides);
 		}
 	}
 
     //MESH
-	Mesh world = Mesh(vertices, indices);
+	Mesh world = Mesh(chunkone.vertices, chunkone.indices);
 	world.generateBuffers(true, true, true);
 
 	// RENDER OPTIONS
