@@ -13,6 +13,12 @@ struct Chunk {
     std::vector<unsigned int> indices;
 };
 
+struct WorldMesh {
+    int chunkcount;
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+};
+
 class World {
 public:
 
@@ -20,15 +26,19 @@ public:
 
     World(unsigned long seed);
     Chunk GetChunk(int xoffset, int zoffset);
+    void LoadChunks(int xstart, int xend, int zstart, int zend);
+    WorldMesh GetWorldMesh();
 
 private:
     unsigned long seed;
-    unsigned int chunksize = 16;
-    unsigned int chunkheight = 256;
+    int chunksize = 16;
+    int chunkheight = 256;
     float scale = 0.01f;
     unsigned int octaves = 4;
     siv::PerlinNoise::seed_type perlinnoiseseed;
     siv::PerlinNoise perlinnoise;
+
+    std::vector<Chunk> chunks;
 
     void SetSeed(unsigned long seed);
     std::vector<std::vector<float>> SampleChunkNoise(int xoffset, int zoffset);

@@ -40,6 +40,42 @@ std::vector<std::vector<float>> World::SampleChunkNoise(int xoffset, int zoffset
     return noisemap;
 }
 
+void World::LoadChunks(int xstart, int xend, int zstart, int zend){
+    for(int i = xstart; i < xend; ++i){
+        for(int j = zstart; j < zend; ++j){
+            if( std::all_of( this->chunks.cbegin(), this->chunks.cend(), [i, j](auto chunk){ return ! (chunk.xoffset == i && chunk.zoffset == j); } ) ){
+                std::cout << "StartLoadChunks\n";
+                this->chunks.push_back(this->GetChunk(i, j));
+                std::cout << "EndLoadChunks\n";
+            }
+        }
+    }
+    std::cout << "Chunks: " << this->chunks.size() << "\n";
+}
+
+WorldMesh World::GetWorldMesh(){
+    std::vector<Vertex> worldverts;
+    std::vector<unsigned int> worldinds;
+    int verticecount = 0;
+    for(auto chunk : this->chunks){
+        worldverts.insert(worldverts.end(), chunk.vertices.begin(), chunk.vertices.end());
+        std::cout << "startinds\n";
+        for(int indice : chunk.indices){
+            worldinds.emplace_back(indice + verticecount);
+        }
+        std::cout << "endinds\n";
+        // worldinds.insert(worldinds.end(), chunk.indices.begin(), chunk.indices.end());
+        verticecount += chunk.vertices.size();
+    }
+
+    WorldMesh wmesh;
+    wmesh.chunkcount = this->chunks.size();
+    wmesh.vertices = worldverts;
+    wmesh.indices = worldinds;
+    std::cout << "Vertices: " << wmesh.vertices.size() << "\n";
+    return wmesh;
+}
+
 Chunk World::GetChunk(int xoffset, int zoffset){
     Chunk newchunk;
     newchunk.xoffset = xoffset;
@@ -58,12 +94,13 @@ Chunk World::GetChunk(int xoffset, int zoffset){
             }
         }
 	}
+    // std::cout << xoffset * this->chunksize << " :: " << zoffset * this->chunksize << "\n";
     for(int i = 0; i < this->chunksize; i++){ // x
 		for(int j = 0; j < this->chunksize; j++){ // z
             for(int k = 0; k < this->chunkheight; ++k){
                 if(newchunk.blocks.at(i).at(k).at(j) == MC_STONE){
                     //float y = Utils::froundf(100.0f * chunknoise[i][j]);
-                    float transvec[3] = {i*1.0f, float(k), j*1.0f};
+                    float transvec[3] = { i * 1.0f + xoffset * this->chunksize, float(k), j * 1.0f + zoffset * this->chunksize};
 			        std::array<int, 6> cubesides = this->ChunkBlockSides(newchunk.blocks, i, k, j);
                     // int cubesides[6] = { 1, 1, 1, 1, 1, 1};
 			        generateCube(vertices, indices, transvec, cubesides);
@@ -71,8 +108,6 @@ Chunk World::GetChunk(int xoffset, int zoffset){
             }
         }
 	}
-
-
 
     newchunk.vertices = vertices;
     newchunk.indices = indices;
@@ -84,7 +119,6 @@ std::array<int, 6> World::ChunkBlockSides(std::vector<std::vector<std::vector<in
     std::array<int, 6> sides;
     sides.fill(0);
     if(x - 1 >= 0){ // left
-        std::cout << blocks.at(x - 1).at(y).at(z) << ":" << MC_AIR << "\n"; 
         if(blocks.at(x - 1).at(y).at(z) == MC_AIR){
             sides.at(0) = 1;
         }

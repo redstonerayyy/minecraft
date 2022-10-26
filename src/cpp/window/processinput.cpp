@@ -5,7 +5,7 @@ void processInput(GLFWwindow* window, std::vector<Vertex> &verts, std::vector<un
 {
     // get game
 	Game * game = GetGame(window);
-    std::cout << game->time.fps << "\n";
+    // std::cout << game->time.fps << "\n";
 
 	//close
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
