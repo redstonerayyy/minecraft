@@ -9,4 +9,5 @@
 #include <time.h>
 #include <iostream>
 
+// handle key presses, verts and inds to change world on u press
 void processInput(GLFWwindow* window, std::vector<Vertex> &verts, std::vector<unsigned int> &inds);

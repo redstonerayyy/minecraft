@@ -8,6 +8,8 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
+// class to set model, view and projection matrix for
+// a specific shader and a certain camera
 class Space {
 public:
     glm::mat4 view;

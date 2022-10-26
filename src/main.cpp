@@ -122,13 +122,10 @@ int main()
 
         // INPUT
 		//keysboard input, mouse input
-        std::cout << vertices[0].Position.x << vertices[0].Position.y << vertices[0].Position.z << std::endl;
 		processInput(&window, vertices, indices);
         world.vertices = vertices;
         world.indices = indices;
         world.updateBuffers();
-        std::cout << vertices[0].Position.x << vertices[0].Position.y << vertices[0].Position.z << std::endl;
-
 		defaultShader.use();
 
 		// DRAWING

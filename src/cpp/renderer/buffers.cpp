@@ -1,14 +1,16 @@
 #include "buffers.hpp"
 
-//VAO
+//generate opengl vao object
 VAO::VAO() {
-	glGenVertexArrays(1, &this->vaoID);
+    glGenVertexArrays(1, &this->vaoID);
 }
-
+// bind the object
 void VAO::bind(){
 	glBindVertexArray(this->vaoID);
 }
-
+// call the fill methods for ebo and vbo,
+// set the attribute pointers
+// according to the input
 void VAO::fill(bool pos, bool tex, bool normal) {
 	this->bind();
 	this->vbo->fillBuffer();
@@ -19,13 +21,13 @@ void VAO::fill(bool pos, bool tex, bool normal) {
 	if(tex) { this->setAttribPointer(1, 2, GL_FLOAT, false, 8, 3); };
 	if(normal) { this->setAttribPointer(2, 3, GL_FLOAT, false, 8, 5); };
 }
-
+// call the update function on the ebo and vbo
 void VAO::update(){
 	this->bind();
 	this->vbo->updateBuffer();
     this->ebo->updateBuffer();
 }
-
+// set properties for the vbo
 void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, int stride, int offset) {
 	this->bind();
 	glVertexAttribPointer(
@@ -39,12 +41,12 @@ void VAO::setAttribPointer(int attribID, int length, int type, bool normalized, 
 	glEnableVertexAttribArray(attribID);
 }
 
-//VBO
+//generate opengl vbo object, set vertices
 VBO::VBO(std::vector<Vertex> vertices) {
 	glGenBuffers(1, &this->vboID);
 	this->vertices = vertices;
 }
-
+// bind buffer so it can be modified
 void VBO::bind(){
     glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 }
@@ -59,12 +61,12 @@ void VBO::updateBuffer(){
 	glBufferSubData(GL_ARRAY_BUFFER, 0, this->vertices.size() * sizeof(this->vertices[0]), &this->vertices[0]);
 }
 
-//EBO
+//generate opengl ebo object, set indices
 EBO::EBO(std::vector<unsigned int> indices) {
 	glGenBuffers(1, &this->eboID);
 	this->indices = indices;
 }
-
+// bind buffer so it can be modified
 void EBO::bind(){
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboID);
 }

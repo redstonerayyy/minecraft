@@ -2,6 +2,8 @@
 
 #include <glm.hpp>
 
+// hold information about camera
+// currently with default information
 class Camera{
 public:
     glm::vec3 camerapos;

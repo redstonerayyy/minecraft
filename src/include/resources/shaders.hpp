@@ -7,6 +7,7 @@
 //advanced calculation stuff
 #include <glm.hpp>
 
+// read file and create shader of shadertype
 class Shader {
 public:
     unsigned int shaderID;
@@ -14,6 +15,9 @@ public:
     Shader(int shaderType, const char * shaderpath, std::string filename);
 };
 
+// make a program with the specified shader object
+// also set uniform values to the shader program
+// like matrices, vector usw.
 class ShaderProgram {
 public:
     unsigned int programID;

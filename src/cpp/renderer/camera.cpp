@@ -1,5 +1,6 @@
 #include "camera.hpp"
 
+// camera object to hold information about a camera
 Camera::Camera(
         glm::vec3 cameraposition,
         glm::vec3 camerafront,

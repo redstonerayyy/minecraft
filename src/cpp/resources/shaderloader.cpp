@@ -2,6 +2,7 @@
 
 #include <glad/gl.h>
 
+// load all shaders
 ShaderLoader::ShaderLoader(std::vector<std::string> directories, std::vector<std::string> paths){
 	// get all filepaths for each directory
     // check if the file ends on .glsl
@@ -22,6 +23,7 @@ ShaderLoader::ShaderLoader(std::vector<std::string> directories, std::vector<std
 	}
 }
 
+// make a shader program and return it
 ShaderProgram ShaderLoader::MakeProgram(std::vector<std::string> shadernames){
     std::vector<Shader> shaderstolink;
     for(int i = 0; i < shadernames.size(); ++i){
