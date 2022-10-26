@@ -84,7 +84,7 @@ int main()
 
 	World worldgen = World( seed );
 	// Chunk chunkone = worldgen.GetChunk(0, 0);
-	worldgen.LoadChunks(-10, 10, -10, 10);
+	worldgen.LoadChunks(-5, 5, -5, 5);
 	WorldMesh wmesh = worldgen.GetWorldMesh();
 
     //MESH

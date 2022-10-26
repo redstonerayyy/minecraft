@@ -4,7 +4,7 @@
 #include "blocks.hpp"
 
 #include <iostream>
-// #include <array>
+#include <thread>
 
 unsigned long World::GetSeed(){
     return this->seed;
@@ -40,16 +40,37 @@ std::vector<std::vector<float>> World::SampleChunkNoise(int xoffset, int zoffset
     return noisemap;
 }
 
-void World::LoadChunks(int xstart, int xend, int zstart, int zend){
-    for(int i = xstart; i < xend; ++i){
-        for(int j = zstart; j < zend; ++j){
-            if( std::all_of( this->chunks.cbegin(), this->chunks.cend(), [i, j](auto chunk){ return ! (chunk.xoffset == i && chunk.zoffset == j); } ) ){
-                std::cout << "StartLoadChunks\n";
-                this->chunks.push_back(this->GetChunk(i, j));
-                std::cout << "EndLoadChunks\n";
-            }
+static void World::AddChunk(World &world, std::vector<Chunk> &chunks, int xoffset, int zstart, int zend, std::mutex &mtx){
+    for(int j = zstart; j < zend; ++j){
+        if( std::all_of( chunks.cbegin(), chunks.cend(), [xoffset, j](auto chunk){ return ! (chunk.xoffset == xoffset && chunk.zoffset == j); } ) ){
+            Chunk newchunk = world.GetChunk(xoffset, j);
+            mtx.lock();
+            chunks.push_back(newchunk);                
+            mtx.unlock();
         }
     }
+}
+
+void World::LoadChunks(int xstart, int xend, int zstart, int zend){
+    //use threads
+    std::mutex mtx;
+    
+    std::vector<std::thread> threads;
+    for(int i = xstart; i < xend; ++i){
+        // for(int j = zstart; j < zend; ++j){
+        //     if( std::all_of( this->chunks.cbegin(), this->chunks.cend(), [i, j](auto chunk){ return ! (chunk.xoffset == i && chunk.zoffset == j); } ) ){
+        //         std::cout << "StartLoadChunks\n";
+        //         this->chunks.push_back(this->GetChunk(i, j));                
+        //         std::cout << "EndLoadChunks\n";
+        //     }
+        // }
+        threads.push_back( std::thread( this->AddChunk, std::ref(this), std::ref(this->chunks), i, zstart, zend, std::ref(mtx) ) );   
+    }
+
+    for(std::thread & thread : threads){
+        thread.join();
+    }
+
     std::cout << "Chunks: " << this->chunks.size() << "\n";
 }
 
