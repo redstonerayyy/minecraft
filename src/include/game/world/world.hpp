@@ -4,7 +4,6 @@
 #include "PerlinNoise.hpp"
 
 #include <vector>
-#include <mutex>
 #include "structs.hpp"
 struct Chunk {
     int xoffset;
@@ -41,8 +40,8 @@ private:
 
     std::vector<Chunk> chunks;
 
+    bool IsChunkLoaded(int xoffset, int zoffset);
     void SetSeed(unsigned long seed);
-    static void AddChunk(World &world, std::vector<Chunk> &chunks, int xoffset, int zstart, int zend, std::mutex &mtx);
     std::vector<std::vector<float>> SampleChunkNoise(int xoffset, int zoffset);
     std::array<int, 6> ChunkBlockSides(std::vector<std::vector<std::vector<int>>> &blocks, int x, int y, int z);
 };

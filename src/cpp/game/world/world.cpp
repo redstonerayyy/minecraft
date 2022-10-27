@@ -4,7 +4,6 @@
 #include "blocks.hpp"
 
 #include <iostream>
-#include <thread>
 
 unsigned long World::GetSeed(){
     return this->seed;
@@ -40,35 +39,15 @@ std::vector<std::vector<float>> World::SampleChunkNoise(int xoffset, int zoffset
     return noisemap;
 }
 
-static void World::AddChunk(World &world, std::vector<Chunk> &chunks, int xoffset, int zstart, int zend, std::mutex &mtx){
-    for(int j = zstart; j < zend; ++j){
-        if( std::all_of( chunks.cbegin(), chunks.cend(), [xoffset, j](auto chunk){ return ! (chunk.xoffset == xoffset && chunk.zoffset == j); } ) ){
-            Chunk newchunk = world.GetChunk(xoffset, j);
-            mtx.lock();
-            chunks.push_back(newchunk);                
-            mtx.unlock();
-        }
-    }
-}
-
 void World::LoadChunks(int xstart, int xend, int zstart, int zend){
-    //use threads
-    std::mutex mtx;
-    
-    std::vector<std::thread> threads;
     for(int i = xstart; i < xend; ++i){
-        // for(int j = zstart; j < zend; ++j){
-        //     if( std::all_of( this->chunks.cbegin(), this->chunks.cend(), [i, j](auto chunk){ return ! (chunk.xoffset == i && chunk.zoffset == j); } ) ){
-        //         std::cout << "StartLoadChunks\n";
-        //         this->chunks.push_back(this->GetChunk(i, j));                
-        //         std::cout << "EndLoadChunks\n";
-        //     }
-        // }
-        threads.push_back( std::thread( this->AddChunk, std::ref(this), std::ref(this->chunks), i, zstart, zend, std::ref(mtx) ) );   
-    }
-
-    for(std::thread & thread : threads){
-        thread.join();
+        for(int j = zstart; j < zend; ++j){
+            if( this->IsChunkLoaded(i, j) ){
+                std::cout << "StartLoadChunks\n";
+                this->chunks.push_back(this->GetChunk(i, j));                
+                std::cout << "EndLoadChunks\n";
+            }
+        }
     }
 
     std::cout << "Chunks: " << this->chunks.size() << "\n";
@@ -136,6 +115,10 @@ Chunk World::GetChunk(int xoffset, int zoffset){
     return newchunk;
 }
 
+bool World::IsChunkLoaded(int xoffset, int zoffset){
+    return std::all_of( this->chunks.cbegin(), this->chunks.cend(), [xoffset, zoffset](auto chunk){ return ! (chunk.xoffset == xoffset && chunk.zoffset == zoffset); } );
+}
+
 std::array<int, 6> World::ChunkBlockSides(std::vector<std::vector<std::vector<int>>> &blocks, int x, int y, int z){
     std::array<int, 6> sides;
     sides.fill(0);
@@ -144,7 +127,7 @@ std::array<int, 6> World::ChunkBlockSides(std::vector<std::vector<std::vector<in
             sides.at(0) = 1;
         }
     } else {// is at chunk edge
-        sides[0] = 1;
+        sides[0] = 0;
     }
     if(y - 1 >= 0){ // bottom
         if(blocks.at(x).at(y - 1).at(z) == MC_AIR){
@@ -158,14 +141,14 @@ std::array<int, 6> World::ChunkBlockSides(std::vector<std::vector<std::vector<in
             sides[2] = 1;
         }
     } else {// is at chunk edge
-        sides[2] = 1;
+        sides[2] = 0;
     }
     if(x + 1 < this->chunksize){ // right
         if(blocks.at(x + 1).at(y).at(z) == MC_AIR){
             sides[3] = 1;
         }
     } else { // is at chunk edge
-        sides[3] = 1;
+        sides[3] = 0;
     }
     if(y + 1 < this->chunkheight){ // top
         if(blocks.at(x).at(y + 1).at(z) == MC_AIR){
@@ -179,7 +162,7 @@ std::array<int, 6> World::ChunkBlockSides(std::vector<std::vector<std::vector<in
             sides[5] = 1;
         }
     } else {
-        sides[5] = 1;
+        sides[5] = 0;
     }
     return sides;
 }
