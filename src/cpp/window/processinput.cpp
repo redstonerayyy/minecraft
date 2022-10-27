@@ -5,7 +5,7 @@ void processInput(GLFWwindow* window, std::vector<Vertex> &verts, std::vector<un
 {
     // get game
 	Game * game = GetGame(window);
-    std::cout << game->time.fps << "\n";
+    // std::cout << game->time.fps << "\n";
 
 	//close
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -39,7 +39,7 @@ void processInput(GLFWwindow* window, std::vector<Vertex> &verts, std::vector<un
         for(int i = 0; i < size; i++){
             for(int j = 0; j < size; j++){
                 float transvec[3] = {i*1.0f, Utils::froundf(100.0f * noisemap[i][j]), j*1.0f};
-                int cubesides[6] = { 1, 1, 1, 1, 1, 1};
+                std::array<int, 6> cubesides = { 1, 1, 1, 1, 1, 1};
                 generateCube(vtemp, itemp, transvec, cubesides);
             }
         }

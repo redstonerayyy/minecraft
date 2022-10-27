@@ -36,6 +36,7 @@
 #include "space.hpp"
 
 #include "utils.hpp"
+#include "world.hpp"
 
 
 //matrices
@@ -71,7 +72,8 @@ int main()
 	Texture texture2 = Texture(texturedir + "white.png");
 
 	//SEED
-	std::srand(time(NULL));
+	// std::srand(time(NULL));
+	std::srand(10302030202);
 	int seed = std::rand();
 
 	std::cout << seed << "\n";
@@ -80,18 +82,14 @@ int main()
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	int size = 200.0f;
-	std::vector<std::vector<float>> noisemap = generateNoiseMap(size, size, 4, seed);
-	for(int i = 0; i < size; i++){
-		for(int j = 0; j < size; j++){
-			float transvec[3] = {i*1.0f, Utils::froundf(100.0f * noisemap[i][j]), j*1.0f};
-			int cubesides[6] = { 1, 1, 1, 1, 1, 1};
-			generateCube(vertices, indices, transvec, cubesides);
-		}
-	}
+	World worldgen = World( seed );
+	// Chunk chunkone = worldgen.GetChunk(0, 0);
+	worldgen.LoadChunks(-5, 5, -5, 5);
+	WorldMesh wmesh = worldgen.GetWorldMesh();
 
     //MESH
-	Mesh world = Mesh(vertices, indices);
+	// Mesh world = Mesh(chunkone.vertices, chunkone.indices);
+	Mesh world = Mesh( wmesh.vertices, wmesh.indices );
 	world.generateBuffers(true, true, true);
 
 	// RENDER OPTIONS
@@ -123,9 +121,9 @@ int main()
         // INPUT
 		//keysboard input, mouse input
 		processInput(&window, vertices, indices);
-        world.vertices = vertices;
-        world.indices = indices;
-        world.updateBuffers();
+        // world.vertices = vertices;
+        // world.indices = indices;
+        // world.updateBuffers();
 		defaultShader.use();
 
 		// DRAWING

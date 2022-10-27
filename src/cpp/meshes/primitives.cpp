@@ -36,7 +36,7 @@ void generateSquare(std::vector<Vertex> &vertices, std::vector<unsigned int> &in
 	indices.push_back(verticeslength + 3);
 }
 
-void generateCube(std::vector<Vertex> &vertices, std::vector<unsigned int> &mesh_indices, float pvector[3], int sides[6]){
+void generateCube(std::vector<Vertex> &vertices, std::vector<unsigned int> &mesh_indices, float pvector[3], std::array<int, 6> sides){
 	const float shiftzero[3] = {0.0f, 0.0f, 0.0f};
 	const float shiftx[3] = {1.0f, 0.0f, 0.0f};
 	const float shifty[3] = {0.0f, 1.0f, 0.0f};
@@ -50,7 +50,7 @@ void generateCube(std::vector<Vertex> &vertices, std::vector<unsigned int> &mesh
 	if(sides[2]){//front
 		generateSquare(vertices, mesh_indices, squarez, shiftzero, pvector, normals[2]);
 	}
-	if(sides[3]){//left
+	if(sides[3]){//right
 		generateSquare(vertices, mesh_indices, squarex, shiftx, pvector, normalsreverse[0]);
 	}
 	if(sides[4]){//top
