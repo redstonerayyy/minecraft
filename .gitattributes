@@ -1,2 +1,2 @@
-/glfw linguist-vendored
-/glm linguist-vendored
+/glfw/* linguist-vendored
+/glm/* linguist-vendored
