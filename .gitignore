@@ -1,6 +1,11 @@
+# build files
 /build
 /out
 /run
+# config vscode
 /.vscode
-!/.gitignore
 CMakeSettings.json
+# config intellij
+/.idea
+# git
+!/.gitignore
