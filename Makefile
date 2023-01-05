@@ -11,11 +11,14 @@ clean:
 run: build
 	rm -rf ./run
 	mkdir -p ./run
-	cp ./build/opengl ./run/opengl
+	cp ./build/minecraft ./run/minecraft
 	
 	mkdir -p ./run/shaders/
 	mkdir -p ./run/textures/
 	cp -r ./src/shaders/* ./run/shaders/
 	cp -r ./src/textures/* ./run/textures/
 	
-	./run/opengl
+	./run/minecraft
+
+clean-clion:
+	rm -rf ./.idea

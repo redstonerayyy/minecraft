@@ -4,7 +4,6 @@
 #include "game.hpp"
 #include "structs.hpp"
 #include "worldgen.hpp"
-#include "utils.hpp"
 #include "primitives.hpp"
 #include <time.h>
 #include <iostream>

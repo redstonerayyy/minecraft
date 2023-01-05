@@ -43,9 +43,7 @@ void World::LoadChunks(int xstart, int xend, int zstart, int zend){
     for(int i = xstart; i < xend; ++i){
         for(int j = zstart; j < zend; ++j){
             if( this->IsChunkLoaded(i, j) ){
-                std::cout << "StartLoadChunks\n";
                 this->chunks.push_back(this->GetChunk(i, j));                
-                std::cout << "EndLoadChunks\n";
             }
         }
     }
@@ -59,11 +57,9 @@ WorldMesh World::GetWorldMesh(){
     int verticecount = 0;
     for(auto chunk : this->chunks){
         worldverts.insert(worldverts.end(), chunk.vertices.begin(), chunk.vertices.end());
-        std::cout << "startinds\n";
         for(int indice : chunk.indices){
             worldinds.emplace_back(indice + verticecount);
         }
-        std::cout << "endinds\n";
         // worldinds.insert(worldinds.end(), chunk.indices.begin(), chunk.indices.end());
         verticecount += chunk.vertices.size();
     }

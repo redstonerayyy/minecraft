@@ -1,19 +1,9 @@
 #project and settings
 CMAKE_MINIMUM_REQUIRED(VERSION 3.22)
-set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS "-Wall")
 
-project(opengl)
-
-#find opengl
-find_package(OpenGL REQUIRED)
-
-if (OPENGL_FOUND)
-    message("opengl found")
-    message("include dir: ${OPENGL_INCLUDE_DIR}")
-else (OPENGL_FOUND)
-    message("opengl not found")
-endif()
-
+project(minecraft)
 
 #build glfw
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -24,31 +14,27 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/glfw)
 
 #build minecraft
 #source files
-FILE(GLOB SOURCE_FILES_SUB0 src/cpp/*.cpp)
-FILE(GLOB SOURCE_FILES_SUB1 src/cpp/**/*.cpp)
-FILE(GLOB SOURCE_FILES_SUB2 src/cpp/**/**/*.cpp)
+FILE(GLOB SF_APPLICATION src/cpp/application/*.cpp)
+FILE(GLOB SF_SHADER src/cpp/shader/*.cpp)
+FILE(GLOB SF_TEXTURE src/cpp/texture/*.cpp)
+FILE(GLOB SF_UTILS src/cpp/utils/*.cpp)
+FILE(GLOB SF_RENDERER src/cpp/renderer/opengl/*.cpp)
 
 #add target
-add_executable(opengl src/main.cpp ${SOURCE_FILES_SUB0} ${SOURCE_FILES_SUB1} ${SOURCE_FILES_SUB2} glfw/deps/glad_gl.c)
+add_executable(minecraft src/main.cpp glad/src/glad.c ${SF_APPLICATION} ${SF_SHADER} ${SF_TEXTURE} ${SF_UTILS} ${SF_RENDERER})
 
-#include dirs
-
-#libraries
-target_include_directories(opengl PRIVATE ${OPENGL_INCLUDE_DIRS})
-target_include_directories(opengl PRIVATE glm/glm)
-target_include_directories(opengl PRIVATE glfw/include)
-target_include_directories(opengl PRIVATE glfw/deps)
-target_include_directories(opengl PRIVATE lib/include)
+#library headers
+target_include_directories(minecraft PRIVATE glm/glm)
+target_include_directories(minecraft PRIVATE glfw/include)
+target_include_directories(minecraft PRIVATE lib/include)
+target_include_directories(minecraft PRIVATE glad/include)
 
 #source headers
-target_include_directories(opengl PRIVATE src/include/game)
-target_include_directories(opengl PRIVATE src/include/game/world)
-target_include_directories(opengl PRIVATE src/include/general)
-target_include_directories(opengl PRIVATE src/include/meshes)
-target_include_directories(opengl PRIVATE src/include/renderer)
-target_include_directories(opengl PRIVATE src/include/resources)
-target_include_directories(opengl PRIVATE src/include/util)
-target_include_directories(opengl PRIVATE src/include/window)
+target_include_directories(minecraft PRIVATE src/cpp/application)
+target_include_directories(minecraft PRIVATE src/cpp/texture)
+target_include_directories(minecraft PRIVATE src/cpp/shader)
+target_include_directories(minecraft PRIVATE src/cpp/utils)
+target_include_directories(minecraft PRIVATE src/cpp/renderer/opengl)
 
 #link libraries
-target_link_libraries(opengl ${OPENGL_LIBRARIES} glfw)
+target_link_libraries(minecraft OpenGL glfw)

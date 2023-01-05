@@ -1,4 +1,4 @@
-#version 330 core
+#version 460 core
 
 in vec3 FragPos;
 in vec2 TexCoord;
@@ -30,7 +30,7 @@ void main()
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256);
 	vec3 specular = specularStrength * spec * lightcolor;
 
-	vec4 result = vec4(ambient + diffuse + specular, 1.0) * texture2D(tex_sampler1, TexCoord); 
+	vec4 result = vec4(ambient + diffuse + specular, 1.0) * texture(tex_sampler1, TexCoord); 
     
 	FragColor =  result;
 }

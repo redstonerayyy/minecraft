@@ -7,5 +7,6 @@
 CMakeSettings.json
 # config intellij
 /.idea
+cmake-build-debug
 # git
 !/.gitignore
